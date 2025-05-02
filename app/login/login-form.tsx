@@ -56,5 +56,39 @@ export const LoginForm = () => {
       </fieldset>
     </form>
     <br />
+    <GithubOAuthForm/>
   </div>;
 };
+
+
+function GithubOAuthForm() {
+  const [pending, setPending] = useState(false);
+  const router = useRouter();
+
+  const handleGithubOAuthForm = async (event : FormEvent<HTMLFormElement>)=>{
+    event.preventDefault();
+    await authClient.signIn.social({
+      provider : "github",
+      callbackURL : "https://localhost:3000/dashboard" // TODO: use env to URL for both PROD and DEV
+    },{
+      onRequest: (ctx) => {
+        setPending(true);
+        console.log(ctx);
+      },
+      onError : (ctx) =>{
+        setPending(false);
+        alert(ctx.error.message);
+      },
+      onSuccess : (ctx)=>{
+        console.log(ctx);
+        setPending(false);
+        router.push("/dashboard");
+      }
+    })
+  }
+  return (
+    <form onSubmit={handleGithubOAuthForm}>
+      <button disabled={pending}>{pending ? "Submitting..." : "Login With Github"}</button>
+    </form>
+  )
+}
