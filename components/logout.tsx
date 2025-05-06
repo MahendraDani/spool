@@ -1,10 +1,11 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { FormEvent } from "react";
 
-export const LogOutButton = ()=>{
+export const LogoutButton = ()=>{
   const router = useRouter();
   const handleForm = async (event: FormEvent<HTMLFormElement>)=>{
     event.preventDefault();
@@ -18,7 +19,7 @@ export const LogOutButton = ()=>{
   }
   return (
     <form onSubmit={handleForm}>
-      <button>Logout</button>
+      <Button size={"sm"}>Logout</Button>
     </form>
   )
 }
