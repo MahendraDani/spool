@@ -69,7 +69,7 @@ function GithubOAuthForm() {
     event.preventDefault();
     await authClient.signIn.social({
       provider : "github",
-      callbackURL : "https://localhost:3000/dashboard" // TODO: use env to URL for both PROD and DEV
+      callbackURL : "http://localhost:3000/dashboard" // TODO: use env to URL for both PROD and DEV
     },{
       onRequest: (ctx) => {
         setPending(true);
