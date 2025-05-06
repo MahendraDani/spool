@@ -3,23 +3,51 @@
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { FormEvent } from "react";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { toast } from "sonner";
 
-export const LogoutButton = ()=>{
+export const LogoutButton = () => {
+
   const router = useRouter();
-  const handleForm = async (event: FormEvent<HTMLFormElement>)=>{
-    event.preventDefault();
-    const {data,error} = await authClient.signOut();
+  const form = useForm();
+
+  async function onSubmit() {
+    const {error} = await authClient.signOut();
+
     if(error){
-      alert(error.message);
+      toast.error(error.message)
       return;
     }
-    console.log(data);
-    router.push("/"); // redirect to home page
+
+    router.push("/")
   }
   return (
-    <form onSubmit={handleForm}>
-      <Button size={"sm"}>Logout</Button>
-    </form>
-  )
-}
+    <div className="w-12">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="..."
+          render={() => (
+            <FormItem>
+              <FormLabel />
+              <FormControl>
+                <Button size={"sm"} type="submit">Logout</Button>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        </form>
+      </Form>
+    </div>
+  );
+};
