@@ -16,6 +16,7 @@ import * as z from "zod";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { LoadingCircle } from "../icons/loading-circle";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please use a valid email address" }),
@@ -101,8 +102,8 @@ export const LoginWithEmailForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="mt-3">
-            Login
+          <Button type="submit" className="mt-3 flex justify-center items-center">
+            {form.formState.isSubmitting ? <LoadingCircle/> : "Login"}
           </Button>
         </fieldset>
       </form>
