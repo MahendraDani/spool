@@ -1,10 +1,9 @@
-import { SignUpForm } from "./page-client";
+import { SignupCard } from "@/components/auth/signup-card";
 
-export default function SignUp(){
+export default function SignUp() {
   return (
-    <div>
-      <h1>Sign Up</h1>
-      <SignUpForm/>
+    <div className="container-wrapper md:min-h-[92vh] flex justify-center items-center">
+      <SignupCard />
     </div>
-  )
+  );
 }

@@ -23,7 +23,7 @@ export const LoginWithGitHubForm = () => {
     await authClient.signIn.social(
       {
         provider: "github",
-        callbackURL: "http://localhost:3000/dashboard", // TODO : use env for dev and prod base URL
+        callbackURL: "/dashboard", // TODO : use env for dev and prod base URL
         // newUserCallbackURL : use this for creating workspace and projects for new user
         // errorCallbackURL : create a error page?
       },
