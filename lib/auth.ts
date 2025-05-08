@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import {prisma} from "@/lib/prisma" 
-import { openAPI } from "better-auth/plugins";
+import { openAPI, username } from "better-auth/plugins";
 
 export const auth = betterAuth({
     appName : "Spool",
@@ -51,5 +51,11 @@ export const auth = betterAuth({
     rateLimit : {
         enabled : true
     },
-    plugins : [openAPI()]
+    plugins : [
+        openAPI(),
+        username({
+            minUsernameLength : 5,
+            maxUsernameLength : 30,
+        })
+    ]
 });
