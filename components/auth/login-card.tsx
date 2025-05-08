@@ -7,8 +7,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import { LoginWithEmailForm } from "./login-email-form";
+// import { LoginWithEmailForm } from "./login-email-form";
 import { LoginWithGitHubForm } from "./login-github-form";
+import { LoginWithUsernameForm } from "./login-username-form";
 
 export const LoginCard = () => {
   return (
@@ -22,7 +23,7 @@ export const LoginCard = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <LoginWithEmailForm />
+        <LoginWithUsernameForm />
         <div className="mt-3 mb-1 flex flex-shrink items-center justify-center gap-2">
           <div className="grow basis-0 border-b border-border border-dashed" />
           <span className="text-xs font-normal uppercase leading-none text-neutral-500">

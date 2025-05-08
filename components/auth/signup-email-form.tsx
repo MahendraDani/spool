@@ -20,6 +20,24 @@ import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please use a valid email address" }),
+  name: z.string().min(1,{message : "Name is required"}),
+  username: z
+  .string()
+  .min(3, { message: "Username must be at least 3 characters long." })
+  .max(30, { message: "Username must be at most 30 characters long." })
+  .refine((val) => /^[a-zA-Z0-9._-]+$/.test(val), {
+    message:
+      "Username can only contain letters, numbers, underscores (_), periods (.), or hyphens (-).",
+  })
+  .refine((val) => /^[a-zA-Z0-9]/.test(val), {
+    message: "Username must start with a letter or number.",
+  })
+  .refine((val) => /[a-zA-Z0-9]$/.test(val), {
+    message: "Username must end with a letter or number.",
+  })
+  .refine((val) => !/([_.-])\1/.test(val), {
+    message: "Username cannot contain consecutive special characters like __ or .. or --.",
+  }),
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long." })
@@ -35,7 +53,6 @@ const formSchema = z.object({
     .refine((val) => /[^A-Za-z0-9]/.test(val), {
       message: "Password must include at least one special character.",
     }),
-  name: z.string(),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
@@ -48,16 +65,18 @@ export const SignupEmailForm = () => {
       email: "",
       password: "",
       name: "",
+      username : "",
     },
     resolver: zodResolver(formSchema),
   });
 
-  async function onSubmit({ name, email, password }: FormSchemaType) {
+  async function onSubmit({ name, username,email, password }: FormSchemaType) {
     await authClient.signUp.email(
       {
         name,
         email,
         password,
+        username
       },
       {
         onError: (ctx) => {
@@ -87,6 +106,20 @@ export const SignupEmailForm = () => {
                 <FormDescription className="-my-1">Name</FormDescription>
                 <FormControl>
                   <Input placeholder="Ray Dalio" {...field} />
+                </FormControl>
+                <FormMessage className="-my-1" />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel />
+                <FormDescription className="-my-1">Username</FormDescription>
+                <FormControl>
+                  <Input placeholder="raydalio" {...field} />
                 </FormControl>
                 <FormMessage className="-my-1" />
               </FormItem>
