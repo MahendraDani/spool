@@ -89,8 +89,8 @@ model Workspace {
   slug        String  @unique
 
   // relations
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   folders  Folder[]
   snippets Snippet[]
@@ -98,8 +98,9 @@ model Workspace {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@unique([userId, name]) // unique workspace name for each user
+  @@unique([ownerId, name]) // unique workspace name for each user
   @@map("workspace")
+  @@index([ownerId])
 }
 
 model Folder {
@@ -108,8 +109,8 @@ model Folder {
   description String?
 
   // relations
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
@@ -120,13 +121,14 @@ model Folder {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@unique([workspaceId, userId, name]) // unique folder name for each workspace and user
+  @@unique([workspaceId, ownerId, name]) // unique folder name for each workspace and user
   @@map("folder")
+  @@index([ownerId])
 }
 
 model Snippet {
   id          String  @id @default(cuid())
-  name        String
+  name        String  
   description String?
   code        String
   public      Boolean @default(true) // by default all snips are public
@@ -138,20 +140,23 @@ model Snippet {
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   comments Comment[]
   stars    SnippetStar[]
 
   // counts
   startCount Int @default(0) // denormalize from SnippetStar table => number of rows in SnippetStar
-  commentCount Int @default(0) // denormalize from SnippetStar table => number of rows in Comments tables
+  commentCount Int @default(0) // denormalize from Comment table => number of rows in Comments tables
 
-  // timestamps
+  // metadata
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   // expiresAt DateTime : TODO : add this field to keep expiry of 24hrs, 7 days, 30 days.
+
+  @@unique([folderId,name]) // two snips can't have same name inside a folder
+  @@index([authorId,folderId,workspaceId])
 }
 
 model Comment {
@@ -161,8 +166,8 @@ model Comment {
   snippetId String
   snippet   Snippet @relation(fields: [snippetId], references: [id], onDelete: Cascade)
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   likes CommentLike[]
 
@@ -171,6 +176,7 @@ model Comment {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("comment")
+  @@index([snippetId,authorId])
 }
 
 model CommentLike {
@@ -188,6 +194,7 @@ model CommentLike {
 
   @@unique([commentId, userId]) // a user can like a comment only once
   @@map("comment_like")
+  @@index([userId])
 }
 
 model SnippetStar {
@@ -204,4 +211,5 @@ model SnippetStar {
 
   @@unique([userId,snippetId]) // a user can star only once
   @@map("snippet_star")
+  @@index([userId])
 }
