@@ -106,6 +106,7 @@ model Workspace {
 model Folder {
   id          String  @id @default(cuid())
   name        String
+  slug        String
   description String?
 
   // relations
@@ -121,9 +122,9 @@ model Folder {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@unique([workspaceId, ownerId, name]) // unique folder name for each workspace and user
+  @@unique([workspaceId, slug]) // unique folder slug for each workspace and user
   @@map("folder")
-  @@index([ownerId])
+  @@index([ownerId,workspaceId])
 }
 
 model Snippet {

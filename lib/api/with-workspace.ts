@@ -17,7 +17,7 @@ type TWorkspaceRouteHandler = ({
   user: User;
   session: Session;
   workspace: Workspace;
-}) => Promise<NextRequest>;
+}) => Promise<NextResponse>;
 
 export const withWorkspace = async (
   req: NextRequest,
@@ -40,7 +40,7 @@ export const withWorkspace = async (
     }
 
     // const workspaceSlug = req.url
-    const workspaceSlug = req.nextUrl.searchParams.get("slug");
+    const workspaceSlug = req.nextUrl.searchParams.get("workspace-slug");
     if (!workspaceSlug) {
       throw new SpoolAPIError({
         status: "bad_request",

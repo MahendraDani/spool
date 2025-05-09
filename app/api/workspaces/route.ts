@@ -19,18 +19,18 @@ export const POST = async (req: NextRequest) => {
       // Trade-off : currently API is used internally, that means it will be called by me
       // so I will make sure to check if a workspace exists before calling this API. 
       // Hence commenting out for now!
-      // const slugAlreadyUsed = await prisma.workspace.findFirst({
-      //   where : {
-      //     slug,
-      //   }
-      // })
+      const slugAlreadyUsed = await prisma.workspace.findFirst({
+        where : {
+          slug,
+        }
+      })
 
-      // if(slugAlreadyUsed){
-      //   throw new SpoolAPIError({
-      //     status : "conflict",
-      //     message : `The slug \"${slug}\" is already in use.`
-      //   })
-      // }
+      if(slugAlreadyUsed){
+        throw new SpoolAPIError({
+          status : "conflict",
+          message : `The slug \"${slug}\" is already in use.`
+        })
+      }
 
       // create new workspace
       const workspace = await prisma.workspace.create({
@@ -41,7 +41,7 @@ export const POST = async (req: NextRequest) => {
           slug,
         },
       });
-      return NextResponse.json({ data: workspace });
+      return NextResponse.json({ data: workspace, message : "Workspace created successfully!" });
     } catch (err) {
       if (err instanceof ZodError) {
         console.error(err);
