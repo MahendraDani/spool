@@ -11,7 +11,7 @@ export default async function Dashboard() {
     redirect("/")
   }
 
-  return <div>
+  return <div className="container">
     <h1>Dashboard</h1>
     <pre>{JSON.stringify(session,null,2)}</pre>
   </div>
