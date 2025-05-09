@@ -14,10 +14,12 @@ const generateUsername = (format: string) => {
 
 export const auth = betterAuth({
   appName: "Spool",
-
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  advanced : {
+    cookiePrefix : "spool",
+  },
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // update active session every 1 day
