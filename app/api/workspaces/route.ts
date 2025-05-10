@@ -1,5 +1,8 @@
 import { SpoolAPIError } from "@/lib/api/error";
-import { spoolAPIErrorHandler, spoolInternalAPIErrorHandler } from "@/lib/api/error-handler";
+import {
+  spoolAPIErrorHandler,
+  spoolInternalAPIErrorHandler,
+} from "@/lib/api/error-handler";
 import { withSession } from "@/lib/api/with-session";
 import { prisma } from "@/lib/prisma";
 import { ZCreateWorkspaceSchema } from "@/lib/zod";
@@ -17,19 +20,19 @@ export const POST = async (req: NextRequest) => {
       // check if workspace exists with the same slug
       // this really scans the all the rows in workspace table, which won't be really good for performance!
       // Trade-off : currently API is used internally, that means it will be called by me
-      // so I will make sure to check if a workspace exists before calling this API. 
+      // so I will make sure to check if a workspace exists before calling this API.
       // Hence commenting out for now!
       const slugAlreadyUsed = await prisma.workspace.findFirst({
-        where : {
+        where: {
           slug,
-        }
-      })
+        },
+      });
 
-      if(slugAlreadyUsed){
+      if (slugAlreadyUsed) {
         throw new SpoolAPIError({
-          status : "conflict",
-          message : `The slug \"${slug}\" is already in use.`
-        })
+          status: "conflict",
+          message: `The slug \"${slug}\" is already in use.`,
+        });
       }
 
       // create new workspace
@@ -41,7 +44,10 @@ export const POST = async (req: NextRequest) => {
           slug,
         },
       });
-      return NextResponse.json({ data: workspace, message : "Workspace created successfully!" });
+      return NextResponse.json({
+        data: workspace,
+        message: "Workspace created successfully!",
+      });
     } catch (err) {
       if (err instanceof ZodError) {
         console.error(err);
@@ -51,8 +57,39 @@ export const POST = async (req: NextRequest) => {
           { error: "database_error", details: err.message },
           { status: 500 }
         );
-      }else if(err instanceof SpoolAPIError){
-        return spoolAPIErrorHandler(req,err);
+      } else if (err instanceof SpoolAPIError) {
+        return spoolAPIErrorHandler(req, err);
+      }
+      return spoolInternalAPIErrorHandler(req, err);
+    }
+  });
+};
+
+// GET /api/workspaces - get all workspaces of current user
+export const GET = async (req: NextRequest) => {
+  return withSession(req, async ({ user }) => {
+    try {
+      const workspaces = await prisma.workspace.findMany({
+        where: {
+          ownerId: user.id,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      return NextResponse.json({
+        data: workspaces,
+        message: "Workspaces fetched successfully",
+      });
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        return NextResponse.json(
+          { error: "database_error", details: err.message },
+          { status: 500 }
+        );
+      } else if (err instanceof SpoolAPIError) {
+        return spoolAPIErrorHandler(req, err);
       }
       return spoolInternalAPIErrorHandler(req, err);
     }
