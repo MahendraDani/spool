@@ -78,7 +78,7 @@ export const LoginWithUsernameForm = () => {
         },
         onSuccess : ()=>{
           toast.success("Logged in successfully");
-          router.push("/dashboard")
+          router.push("/onboard")
         }
       }
     );

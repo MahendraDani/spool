@@ -40,7 +40,6 @@ const formSchema = z.object({
 type FormSchemaType = z.infer<typeof formSchema>;
 
 export const LoginWithEmailForm = () => {
-  const router = useRouter();
 
   const form = useForm<FormSchemaType>({
     defaultValues: {
@@ -55,6 +54,7 @@ export const LoginWithEmailForm = () => {
       {
         email,
         password,
+        callbackURL : "/onboard"
       },
       {
         onError: (ctx) => {
@@ -62,7 +62,7 @@ export const LoginWithEmailForm = () => {
         },
         onSuccess : ()=>{
           toast.success("Logged in successfully");
-          router.push("/dashboard")
+          // router.push("/onboard")
         }
       }
     );

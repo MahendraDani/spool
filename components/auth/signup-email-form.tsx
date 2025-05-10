@@ -16,7 +16,6 @@ import { LoadingCircle } from "../icons/loading-circle";
 import { Input } from "../ui/input";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please use a valid email address" }),
@@ -58,7 +57,6 @@ const formSchema = z.object({
 type FormSchemaType = z.infer<typeof formSchema>;
 
 export const SignupEmailForm = () => {
-  const router = useRouter();
 
   const form = useForm<FormSchemaType>({
     defaultValues: {
@@ -71,12 +69,12 @@ export const SignupEmailForm = () => {
   });
 
   async function onSubmit({ name, username,email, password }: FormSchemaType) {
-    await authClient.signUp.email(
+    const {error} = await authClient.signUp.email(
       {
         name,
         email,
         password,
-        username
+        username,
       },
       {
         onError: (ctx) => {
@@ -84,10 +82,16 @@ export const SignupEmailForm = () => {
         },
         onSuccess: () => {
           toast.success("Please check your email for verification link");
-          router.push("/dashboard");
+          // TODO : create a /verify-email page to show users that they have to open email 
+          // verification using magic-link
         },
       }
     );
+
+    if(error){
+      toast.error(error.message)
+      return;
+    }
   }
 
   return (
