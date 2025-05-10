@@ -81,13 +81,13 @@ export const CreateDefaultWorkspace = ({
   return (
     <div className="container-wrapper min-h-[80vh] md:min-h-[92vh] flex justify-center items-center flex-col gap-4 text-center">
       {status === "creating" && (
-        <div className="flex justify-start items-center gap-4 md:text-xl">
+        <div className="flex justify-start items-center gap-4">
           <LoadingCircle />
           <p>Setting up your workspace...</p>
         </div>
       )}
       {status === "redirecting" && (
-        <div className="flex justify-start items-center gap-4 md:text-xl">
+        <div className="flex justify-start items-center gap-4">
           <LoadingCircle />
           <p>Redirecting you to your default folder...</p>
         </div>

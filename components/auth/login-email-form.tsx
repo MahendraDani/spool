@@ -15,7 +15,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { LoadingCircle } from "../icons/loading-circle";
 
 const formSchema = z.object({
@@ -54,7 +53,6 @@ export const LoginWithEmailForm = () => {
       {
         email,
         password,
-        callbackURL : "/onboard"
       },
       {
         onError: (ctx) => {
