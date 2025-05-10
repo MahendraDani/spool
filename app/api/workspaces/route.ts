@@ -95,3 +95,30 @@ export const GET = async (req: NextRequest) => {
     }
   });
 };
+
+export const DELETE = async (req : NextRequest)=>{
+  return withSession(req, async ({user})=>{
+    try {
+      await prisma.workspace.deleteMany({
+        where : {
+          ownerId : user.id
+        }
+      })
+
+      return NextResponse.json({
+        data : null,
+        message : "All workspaces deleted successfully"
+      })
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        return NextResponse.json(
+          { error: "database_error", details: err.message },
+          { status: 500 }
+        );
+      } else if (err instanceof SpoolAPIError) {
+        return spoolAPIErrorHandler(req, err);
+      }
+      return spoolInternalAPIErrorHandler(req, err);
+    }
+  })
+}
