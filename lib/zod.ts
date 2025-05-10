@@ -50,3 +50,15 @@ export const ZCreateFolderSchema = z.object({
     ),
   description: z.string().optional(),
 });
+
+export const ZSlugSchema = z.object({
+  slug: z
+    .string()
+    .min(5, { message: "Slug must be at least 3 characters" })
+    .max(48, { message: "Slug must be less than 48 characters" })
+    .transform((v) => slugify(v))
+    .refine((v) => validSlugRegex.test(v), {
+      message:
+        "Slugs can only contain letters, numbers, and hyphens. No spaces or special characters are allowed",
+    }),
+});

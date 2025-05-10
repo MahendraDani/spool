@@ -40,7 +40,7 @@ export const withWorkspace = async (
     }
 
     // const workspaceSlug = req.url
-    const workspaceSlug = req.nextUrl.searchParams.get("workspace-slug");
+    const workspaceSlug = req.nextUrl.searchParams.get("slug");
     if (!workspaceSlug) {
       throw new SpoolAPIError({
         status: "bad_request",
