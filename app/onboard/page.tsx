@@ -15,45 +15,48 @@ import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { CreateDefaultWorkspace } from "./default-workspace";
-
+import { Navbar } from "@/components/navbar";
 
 // type TSearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
 export default async function Page() {
   const session = await auth.api.getSession({
-    headers : await headers()
-  })
+    headers: await headers(),
+  });
 
-  if(!session){
+  if (!session) {
     // unauthenticated users not allowed
-    redirect("/")
+    redirect("/");
   }
 
   const workspaceCount = await prisma.workspace.count({
-    where : {
-      ownerId : session.user.id
-    }
-  })
+    where: {
+      ownerId: session.user.id,
+    },
+  });
 
-  if(workspaceCount > 0){
+  if (workspaceCount > 0) {
     // if not first time user
-    redirect(`/${session.user.username}`)
+    redirect(`/${session.user.username}`);
   }
 
   const user = await prisma.user.findUnique({
-    where : {
-      id: session.user.id
-    }
-  })
+    where: {
+      id: session.user.id,
+    },
+  });
 
-  if(!user){
+  if (!user) {
     return notFound();
   }
 
   return (
-    <div className="container">
-      <div>Email verified</div>
-      <CreateDefaultWorkspace session={session.session} user={user}/>
+    <div>
+      <Navbar />
+      <div className="container">
+        <div>Email verified</div>
+        <CreateDefaultWorkspace session={session.session} user={user} />
+      </div>
     </div>
   );
 }
