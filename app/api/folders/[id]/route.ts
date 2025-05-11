@@ -26,9 +26,9 @@ export const GET = async (
           ownerId: user.id,
           workspaceId: workspace.id,
         },
-        include : {
-          _count : true
-        }
+        include: {
+          _count: true,
+        },
       });
 
       if (!folder) {
@@ -41,6 +41,45 @@ export const GET = async (
       return NextResponse.json({
         data: folder,
         message: "Folder found successfully",
+      });
+    } catch (error) {
+      console.error(error);
+      if (error instanceof ZodError) {
+        return NextResponse.json({ error: error.flatten() });
+      } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        return NextResponse.json(
+          { error: "database_error", details: error.message },
+          { status: 500 }
+        );
+      } else if (error instanceof SpoolAPIError) {
+        return spoolAPIErrorHandler(req, error);
+      }
+      return spoolInternalAPIErrorHandler(req, error);
+    }
+  });
+};
+
+export const DELETE = async (
+  req: NextRequest,
+  props: {
+    params: Promise<{ id: string }>;
+  }
+) => {
+  return withWorkspace(req, async ({ user, workspace }) => {
+    try {
+      const params = await props.params;
+      const id = params.id;
+      await prisma.folder.delete({
+        where: {
+          id,
+          ownerId: user.id,
+          workspaceId: workspace.id,
+        },
+      });
+
+      return NextResponse.json({
+        data: null,
+        message: "Folder deleted successfully",
       });
     } catch (error) {
       console.error(error);
