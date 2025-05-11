@@ -25,11 +25,11 @@ export const GET = (req: NextRequest) => {
         },
       });
 
-      if(!folders){
+      if (!folders) {
         throw new SpoolAPIError({
-          status : "not_found",
-          message : "Folders associated with workspace not found!"
-        })
+          status: "not_found",
+          message: "Folders associated with workspace not found!",
+        });
       }
       return NextResponse.json({
         data: folders,
@@ -92,6 +92,38 @@ export const POST = (req: NextRequest) => {
           status: 201,
         }
       );
+    } catch (error) {
+      console.error(error);
+      if (error instanceof ZodError) {
+        return NextResponse.json({ error: error.flatten() });
+      } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        return NextResponse.json(
+          { error: "database_error", details: error.message },
+          { status: 500 }
+        );
+      } else if (error instanceof SpoolAPIError) {
+        return spoolAPIErrorHandler(req, error);
+      }
+      return spoolInternalAPIErrorHandler(req, error);
+    }
+  });
+};
+
+// DELETE /api/folders?slug=<workspace-slug>
+export const DELETE = async (req: NextRequest) => {
+  return withWorkspace(req, async ({ user, workspace }) => {
+    try {
+      await prisma.folder.deleteMany({
+        where: {
+          ownerId: user.id,
+          workspaceId: workspace.id,
+        },
+      });
+
+      return NextResponse.json({
+        data: null,
+        message: "Folders delete successfully",
+      });
     } catch (error) {
       console.error(error);
       if (error instanceof ZodError) {
