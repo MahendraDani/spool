@@ -11,6 +11,47 @@ import slugify from "@sindresorhus/slugify";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 
+// GET /api/folders?slug=<workspace-slug> - get all folders of a workspace
+export const GET = (req: NextRequest) => {
+  return withWorkspace(req, async ({ user, workspace }) => {
+    try {
+      const folders = await prisma.folder.findMany({
+        where: {
+          ownerId: user.id,
+          workspaceId: workspace.id,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      if(!folders){
+        throw new SpoolAPIError({
+          status : "not_found",
+          message : "Folders associated with workspace not found!"
+        })
+      }
+      return NextResponse.json({
+        data: folders,
+        message: "Folders fetched successfully",
+      });
+    } catch (error) {
+      console.error(error);
+      if (error instanceof ZodError) {
+        return NextResponse.json({ error: error.flatten() });
+      } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        return NextResponse.json(
+          { error: "database_error", details: error.message },
+          { status: 500 }
+        );
+      } else if (error instanceof SpoolAPIError) {
+        return spoolAPIErrorHandler(req, error);
+      }
+      return spoolInternalAPIErrorHandler(req, error);
+    }
+  });
+};
+
 // /api/folders/?slug=<workspace-slug>
 export const POST = (req: NextRequest) => {
   return withWorkspace(req, async ({ user, workspace }) => {
@@ -18,19 +59,19 @@ export const POST = (req: NextRequest) => {
       const { name, description } = await ZCreateFolderSchema.parseAsync(
         await req.json()
       );
-       
+
       const nameAlreadyUsed = await prisma.folder.findFirst({
-        where : {
+        where: {
           name,
-          workspaceId : workspace.id,
-          ownerId : user.id
-        }
-      })
-      if(nameAlreadyUsed){
+          workspaceId: workspace.id,
+          ownerId: user.id,
+        },
+      });
+      if (nameAlreadyUsed) {
         throw new SpoolAPIError({
-          status : "conflict",
-          message : "A folder with same name already exists in the workspace"
-        })
+          status: "conflict",
+          message: "A folder with same name already exists in the workspace",
+        });
       }
       const folder = await prisma.folder.create({
         data: {
