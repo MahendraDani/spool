@@ -31,22 +31,7 @@ export const GET = async (
           ownerId: user.id,
         },
         include: {
-          folders: {
-            orderBy: {
-              createdAt: "desc",
-            },
-            include: {
-              _count: true,
-            },
-          },
-          snippets: {
-            orderBy: {
-              createdAt: "desc",
-            },
-            include: {
-              _count: true,
-            },
-          },
+          _count : true,
         },
       });
 
