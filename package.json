@@ -11,8 +11,8 @@
     "db:migrate": "pnpm dlx prisma migrate dev",
     "db:push": "pnpm dlx prisma db push",
     "db:generate": "pnpm dlx prisma generate",
-    "db:seed":"pnpm dlx tsx prisma/seed.ts",
-    "db:clean" : "pnpm dlx tsx prisma/clean.ts"
+    "db:seed": "pnpm dlx tsx prisma/seed.ts",
+    "db:clean": "pnpm dlx tsx prisma/clean.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^9.7.0",
@@ -23,6 +23,7 @@
     "@radix-ui/react-label": "^2.1.6",
     "@radix-ui/react-separator": "^1.1.6",
     "@radix-ui/react-slot": "^1.2.2",
+    "@radix-ui/react-tooltip": "^1.2.6",
     "@sindresorhus/slugify": "^2.2.1",
     "better-auth": "^1.2.7",
     "class-variance-authority": "^0.7.1",

@@ -1,14 +1,18 @@
-import { DashboardNavbar } from "@/components/dash-nav";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 
-export default function RootLayout({
+export default async function Layout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <div className="flex flex-col">
-      <DashboardNavbar/>
-      {children}
-    </div>
+    <SidebarProvider defaultOpen>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
+        {children}
+      </main>
+    </SidebarProvider>
   );
 }
