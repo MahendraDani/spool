@@ -19,60 +19,59 @@ export const CreateDefaultWorkspace = ({
     "idle" | "creating" | "error" | "redirecting"
   >("idle");
 
-  const createDefaultWorkspaceAndFolder = async () => {
-    try {
-      setStatus("creating");
+  useEffect(() => {
+    const createDefaultWorkspaceAndFolder = async () => {
+      try {
+        setStatus("creating");
 
-      const slug = slugify(
-        `playground-${Math.floor(Math.random() * 10000) + 1}`
-      );
+        const slug = slugify(
+          `playground-${Math.floor(Math.random() * 10000) + 1}`
+        );
 
-      const workspaceRes = await fetch("/api/workspaces", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Cookie: `spool.session_token=${session.token}`,
-        },
-        body: JSON.stringify({
-          name: "Playground",
-          slug,
-          description: "The default workspace of a user",
-        }),
-      });
-
-      if (!workspaceRes.ok) throw new Error("Failed to create workspace");
-
-      const { data: workspace } = await workspaceRes.json();
-
-      const folderRes = await fetch(
-        `/api/folders?workspace-slug=${workspace.slug}`,
-        {
+        const workspaceRes = await fetch("/api/workspaces", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Cookie: `spool.session_token=${session.token}`,
           },
           body: JSON.stringify({
-            name: "Hobby",
-            description: "Folder for my cool snips",
+            name: "Playground",
+            slug,
+            description: "The default workspace of a user",
           }),
-        }
-      );
+        });
 
-      if (!folderRes.ok) throw new Error("Failed to create folder");
+        if (!workspaceRes.ok) throw new Error("Failed to create workspace");
 
-      const { data: folder } = await folderRes.json();
+        const { data: workspace } = await workspaceRes.json();
 
-      setStatus("redirecting");
-      router.push(`/${user.username}/${workspace.slug}/${folder.name}`);
-    } catch (error) {
-      console.error("Workspace creation error:", error);
-      setStatus("error");
-      router.refresh(); // retry in case of error
-    }
-  };
+        const folderRes = await fetch(
+          `/api/folders?workspace-slug=${workspace.slug}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Cookie: `spool.session_token=${session.token}`,
+            },
+            body: JSON.stringify({
+              name: "Hobby",
+              description: "Folder for my cool snips",
+            }),
+          }
+        );
 
-  useEffect(() => {
+        if (!folderRes.ok) throw new Error("Failed to create folder");
+
+        const { data: folder } = await folderRes.json();
+
+        setStatus("redirecting");
+        router.push(`/${user.username}/${workspace.slug}/${folder.name}`);
+      } catch (error) {
+        console.error("Workspace creation error:", error);
+        setStatus("error");
+        router.refresh(); // retry in case of error
+      }
+    };
     if (status === "idle") {
       createDefaultWorkspaceAndFolder();
     }
