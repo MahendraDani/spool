@@ -5,11 +5,8 @@ export default async function Page({params} : {params : Promise<{
 }>}){
   const {username,slug} = await params;
 
-  // check if the user is auth?
-  // check if user is the owner of workspace
-
   return(
-    <div className="container">
+    <div>
       <p>{username}</p>
       <p>{slug}</p>
     </div>
