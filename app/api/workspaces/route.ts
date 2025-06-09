@@ -73,15 +73,15 @@ export const GET = async (req: NextRequest) => {
         where: {
           ownerId: user.id,
         },
+        include : {
+          _count : true
+        },
         orderBy: {
           createdAt: "desc",
         },
       });
 
-      return NextResponse.json({
-        data: workspaces,
-        message: "Workspaces fetched successfully",
-      });
+      return NextResponse.json(workspaces);
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         return NextResponse.json(
