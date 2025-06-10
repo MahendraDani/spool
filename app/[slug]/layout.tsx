@@ -1,4 +1,6 @@
+import { AppSidebar } from "@/components/app-sidebar";
 import { SessionProvider } from "@/components/providers/session-provider";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -20,7 +22,13 @@ export default async function WorkspaceLayout({
     <SessionProvider
       data={{ session: session.session, loginUser: session.user }}
     >
-      {children}
+      <SidebarProvider>
+        <AppSidebar />
+        <main>
+          <SidebarTrigger />
+          {children}
+        </main>
+      </SidebarProvider>
     </SessionProvider>
   );
 }
