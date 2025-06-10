@@ -1,6 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SessionProvider } from "@/components/providers/session-provider";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarExpandTrigger } from "@/components/sidebar-expand-trigger";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -24,8 +25,8 @@ export default async function WorkspaceLayout({
     >
       <SidebarProvider>
         <AppSidebar />
-        <main>
-          <SidebarTrigger />
+        <main className="py-2">
+          <SidebarExpandTrigger/>
           {children}
         </main>
       </SidebarProvider>

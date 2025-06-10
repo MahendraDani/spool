@@ -18,6 +18,7 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
+import { SidebarCollapseTrigger } from "./sidebar-collapse-trigger";
 
 // Menu items.
 const items = [
@@ -55,10 +56,13 @@ const items = [
 export function AppSidebar() {
   return (
     <Sidebar>
-      <SidebarHeader>
-        Hello
+      <SidebarHeader className="group flex flex-row justify-between items-center">
+        <span>Hello</span>
+        <div className="group-hover:visible invisible">
+          <SidebarCollapseTrigger />
+        </div>
       </SidebarHeader>
-      <SidebarSeparator/>
+      <SidebarSeparator />
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
