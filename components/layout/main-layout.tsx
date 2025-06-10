@@ -2,10 +2,10 @@
 
 import { ReactNode } from "react";
 import { AppSidebar } from "../app-sidebar";
-import { SidebarExpandTrigger } from "../sidebar-expand-trigger";
 import { SidebarProvider } from "../ui/sidebar";
 import { useWorkspace } from "@/swr/use-workspace";
 import { notFound } from "next/navigation";
+import { MainNavbar } from "./main-navbar";
 
 export const MainLayout = ({ children }: { children: ReactNode }) => {
   const { data, error, isLoading } = useWorkspace();
@@ -31,12 +31,9 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
       <div>
         <AppSidebar workspace={data.workspace} />
       </div>
-      <div>
-        <div className="flex">
-          <SidebarExpandTrigger />
-          <p>nav options</p>
-        </div>
-        <main>{children}</main>
+      <div className="w-full">
+        <MainNavbar />
+        <main className="py-1">{children}</main>
       </div>
     </SidebarProvider>
   );

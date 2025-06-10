@@ -49,3 +49,4 @@ export function AppSidebar({workspace} : {workspace : TWorkspaceWithCountAndFold
     </Sidebar>
   );
 }
+
