@@ -31,6 +31,8 @@ export const GET = async (
           ownerId: user.id,
         },
         include: {
+          // TODO : use pagination here
+          folders : true,
           _count : true,
         },
       });
@@ -42,7 +44,7 @@ export const GET = async (
         });
       }
       return NextResponse.json({
-        data: workspace,
+        workspace,
         message: "Workspace fetched successfully",
       });
     } catch (err) {

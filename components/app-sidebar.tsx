@@ -1,10 +1,6 @@
 "use client";
 import {
-  Calendar,
-  Home,
-  Inbox,
-  Search,
-  Settings,
+  FolderClosed,
 } from "lucide-react";
 
 import {
@@ -19,45 +15,14 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { SidebarCollapseTrigger } from "./sidebar-collapse-trigger";
+import { TWorkspaceWithCountAndFolders } from "@/lib/types";
+import Link from "next/link";
 
-// Menu items.
-const items = [
-  {
-    title: "Workspaces",
-    url: "#",
-    icon: Home,
-  },
-  {
-    title: "Folders",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Snippets",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-];
-
-/*
-/<username> show user profile in sidebar header
-/<username>/* show workspace in sidebar header
-*/
-export function AppSidebar() {
+export function AppSidebar({workspace} : {workspace : TWorkspaceWithCountAndFolders['workspace']}) {
   return (
     <Sidebar>
       <SidebarHeader className="group flex flex-row justify-between items-center">
-        <span>Hello</span>
+        <span>{workspace.name}</span>
         <div className="group-hover:visible invisible">
           <SidebarCollapseTrigger />
         </div>
@@ -67,13 +32,13 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
+              {workspace.folders.map((item) => (
+                <SidebarMenuItem key={item.name}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+                    <Link href={`/${workspace.slug}/${item.slug}`}>
+                      <FolderClosed />
+                      <span>{item.name}</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
