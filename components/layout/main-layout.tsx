@@ -34,10 +34,10 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
         <AppSidebar workspace={data.workspace} />
       </div>
       <div className="w-full">
-        <div className="p-2 border-b">
+        <div className="p-2">
           <MainNavbar />
         </div>
-        <main className="py-1">{children}</main>
+        <main className="p-1">{children}</main>
       </div>
     </SidebarProvider>
   );

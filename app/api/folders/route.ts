@@ -13,12 +13,11 @@ import { ZodError } from "zod";
 
 // GET /api/folders?slug=<workspace-slug> - get all folders of a workspace
 export const GET = (req: NextRequest) => {
-  return withWorkspace(req, async ({ user, workspace }) => {
+  return withWorkspace(req, async ({ user }) => {
     try {
       const folders = await prisma.folder.findMany({
         where: {
           ownerId: user.id,
-          workspaceId: workspace.id,
         },
         orderBy: {
           createdAt: "desc",

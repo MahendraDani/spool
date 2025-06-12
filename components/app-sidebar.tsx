@@ -1,13 +1,12 @@
 "use client";
-import {
-  FolderClosed,
-} from "lucide-react";
+import { FolderClosed, FolderOpen } from "lucide-react";
 
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -15,35 +14,44 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { TWorkspaceWithCountAndFolders } from "@/lib/types";
-import Link from "next/link";
 import { WorkspaceDropdown } from "./ui/workspace-dropdown";
+import { Collapsible, CollapsibleTrigger } from "./ui/collapsible";
+import { SidebarCollapsibleFolderMenu } from "./sidebar-collapsible-folder-menu";
 
-export function AppSidebar({workspace} : {workspace : TWorkspaceWithCountAndFolders['workspace']}) {
+export function AppSidebar({
+  workspace,
+}: {
+  workspace: TWorkspaceWithCountAndFolders["workspace"];
+}) {
   return (
-    <Sidebar>
+    <Sidebar variant="floating">
       <SidebarHeader className="group">
-        <WorkspaceDropdown activeWorkspace={workspace}/>
+        <WorkspaceDropdown activeWorkspace={workspace} />
       </SidebarHeader>
       <SidebarSeparator />
       <SidebarContent>
         <SidebarGroup>
+          <SidebarGroupLabel>Folders</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {workspace.folders.map((item) => (
-                <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton asChild>
-                    <Link href={`/${workspace.slug}/${item.slug}`}>
-                      <FolderClosed />
-                      <span>{item.name}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            {workspace.folders.map((folder, idx) => (
+              <SidebarMenu key={idx}>
+                <Collapsible className="group/collapsible">
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton className="cursor-pointer">
+                        <FolderClosed className="group-data-[state=open]/collapsible:hidden block" />
+                        <FolderOpen className="group-data-[state=open]/collapsible:block hidden" />
+                        {folder.name}
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <SidebarCollapsibleFolderMenu activeWorkspaceSlug={workspace.slug} />
+                  </SidebarMenuItem>
+                </Collapsible>
+              </SidebarMenu>
+            ))}
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );
 }
-
