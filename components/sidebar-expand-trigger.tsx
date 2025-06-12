@@ -9,8 +9,7 @@ import { SidebarTrigger, useSidebar } from "./ui/sidebar";
 export const SidebarExpandTrigger = () => {
   const { state } = useSidebar();
   return (
-    <div>
-      {state === "collapsed" && (
+    <div className={state==="collapsed" ? "block" : "hidden"}>
         <Tooltip>
           <TooltipTrigger asChild>
             <SidebarTrigger />
@@ -19,7 +18,6 @@ export const SidebarExpandTrigger = () => {
             <p>Expand sidebar</p>
           </TooltipContent>
         </Tooltip>
-      )}
     </div>
   );
 };

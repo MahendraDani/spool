@@ -3,7 +3,7 @@ import { SidebarExpandTrigger } from "../sidebar-expand-trigger";
 
 export const MainNavbar = () => {
   return (
-    <div className="p-2.5 gap-2 w-full border-b flex justify-start items-center">
+    <div className="gap-2 min-h-7 w-full flex justify-start items-center">
       <SidebarExpandTrigger />
       <GithubIcon />
     </div>
