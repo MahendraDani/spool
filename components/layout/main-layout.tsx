@@ -6,9 +6,11 @@ import { SidebarProvider } from "../ui/sidebar";
 import { useWorkspace } from "@/swr/use-workspace";
 import { notFound } from "next/navigation";
 import { MainNavbar } from "./main-navbar";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export const MainLayout = ({ children }: { children: ReactNode }) => {
   const { data, error, isLoading } = useWorkspace();
+  const {isDesktop} = useMediaQuery();
 
   if (isLoading) {
     return (
@@ -27,7 +29,7 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={isDesktop}>
       <div>
         <AppSidebar workspace={data.workspace} />
       </div>

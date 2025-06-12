@@ -14,18 +14,15 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { SidebarCollapseTrigger } from "./sidebar-collapse-trigger";
 import { TWorkspaceWithCountAndFolders } from "@/lib/types";
 import Link from "next/link";
+import { WorkspaceDropdown } from "./ui/workspace-dropdown";
 
 export function AppSidebar({workspace} : {workspace : TWorkspaceWithCountAndFolders['workspace']}) {
   return (
     <Sidebar>
-      <SidebarHeader className="group flex flex-row justify-between items-center">
-        <span>{workspace.name}</span>
-        <div className="group-hover:visible invisible">
-          <SidebarCollapseTrigger />
-        </div>
+      <SidebarHeader className="group">
+        <WorkspaceDropdown activeWorkspaceName={workspace.name} activeWorkspaceSlug={workspace.slug}/>
       </SidebarHeader>
       <SidebarSeparator />
       <SidebarContent>
