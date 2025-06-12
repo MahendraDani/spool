@@ -44,7 +44,10 @@ export function AppSidebar({
                         {folder.name}
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
-                    <SidebarCollapsibleFolderMenu activeWorkspaceSlug={workspace.slug} />
+                    <SidebarCollapsibleFolderMenu
+                      activeWorkspaceSlug={workspace.slug}
+                      folderSlug={folder.slug}
+                    />
                   </SidebarMenuItem>
                 </Collapsible>
               </SidebarMenu>

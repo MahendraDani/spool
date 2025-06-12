@@ -16,3 +16,8 @@ export type TWorkspaceWithCountAndFolders = {
   }>;
   message : string;
 }
+
+export type TSnippetsOfFolder = {
+  snippets : Prisma.SnippetGetPayload<true>[],
+  message : string
+}

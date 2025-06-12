@@ -28,7 +28,7 @@ export const GET = (req: NextRequest) => {
       }
 
       return NextResponse.json({
-        data : snippets,
+        snippets,
         message : "Snippets fetched successfully"
       })
     } catch (error) {
