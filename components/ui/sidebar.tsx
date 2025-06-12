@@ -516,7 +516,7 @@ function SidebarMenuButton({
       data-sidebar="menu-button"
       data-size={size}
       data-active={isActive}
-      className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
+      className={cn("cursor-pointer",sidebarMenuButtonVariants({ variant, size }), className)}
       {...props}
     />
   );

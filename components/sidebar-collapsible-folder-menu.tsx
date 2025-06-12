@@ -47,7 +47,7 @@ const SnippetList = ({
       <SidebarMenuSub className="space-y-1 my-1">
         {Array.from({ length: 5 }).map((_, index) => (
           <SidebarMenuSubItem key={index}>
-            <SidebarMenuSkeleton/>
+            <SidebarMenuSkeleton />
           </SidebarMenuSubItem>
         ))}
       </SidebarMenuSub>
@@ -60,7 +60,8 @@ const SnippetList = ({
       ) : (
         data.snippets.map((snippet, idx) => (
           <SidebarMenuSubItem key={idx}>
-            <SidebarMenuSubButton>{snippet.name}</SidebarMenuSubButton>
+            {/* TODO : update href and handle active state UI */}
+            <SidebarMenuSubButton href="#">{snippet.name}</SidebarMenuSubButton>
           </SidebarMenuSubItem>
         ))
       )}

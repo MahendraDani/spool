@@ -9,7 +9,11 @@ export type TWorkspaceWithCount = Prisma.WorkspaceGetPayload<{
 export type TWorkspaceWithCountAndFolders = {
   workspace : Prisma.WorkspaceGetPayload<{
     include: {
-      folders: true;
+      folders: {
+        include : {
+          _count : true
+        }
+      };
       snippets: true;
       _count: true;
     };

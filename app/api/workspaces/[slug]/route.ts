@@ -32,7 +32,11 @@ export const GET = async (
         },
         include: {
           // TODO : use pagination here
-          folders : true,
+          folders : {
+            include : {
+              _count : true
+            }
+          },
           _count : true,
         },
       });
