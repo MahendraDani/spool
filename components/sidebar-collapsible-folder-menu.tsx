@@ -16,6 +16,23 @@ export const SidebarCollapsibleFolderMenu = ({
   activeWorkspaceSlug: string;
   folderSlug: string;
 }) => {
+  return (
+    <CollapsibleContent>
+      <SnippetList
+        activeWorkspaceSlug={activeWorkspaceSlug}
+        folderSlug={folderSlug}
+      />
+    </CollapsibleContent>
+  );
+};
+
+const SnippetList = ({
+  activeWorkspaceSlug,
+  folderSlug,
+}: {
+  activeWorkspaceSlug: string;
+  folderSlug: string;
+}) => {
   const { isLoading, data, error } = useSnippetsOfFolder({
     workspaceSlug: activeWorkspaceSlug,
     folderSlug,
@@ -27,30 +44,26 @@ export const SidebarCollapsibleFolderMenu = ({
 
   if (isLoading) {
     return (
-      <SidebarMenuSub>
+      <SidebarMenuSub className="space-y-1 my-1">
         {Array.from({ length: 5 }).map((_, index) => (
           <SidebarMenuSubItem key={index}>
-            <SidebarMenuSkeleton showIcon />
+            <SidebarMenuSkeleton/>
           </SidebarMenuSubItem>
         ))}
       </SidebarMenuSub>
     );
   }
-
-  console.log(data);
   return (
-    <CollapsibleContent>
-      <SidebarMenuSub>
-        {!data ? (
-          <p>No snippets found, create one</p>
-        ) : (
-          data.snippets.map((snippet, idx) => (
-            <SidebarMenuSubItem key={idx}>
-              <SidebarMenuSubButton>{snippet.name}</SidebarMenuSubButton>
-            </SidebarMenuSubItem>
-          ))
-        )}
-      </SidebarMenuSub>
-    </CollapsibleContent>
+    <SidebarMenuSub>
+      {!data ? (
+        <p>No snippets found, create one</p>
+      ) : (
+        data.snippets.map((snippet, idx) => (
+          <SidebarMenuSubItem key={idx}>
+            <SidebarMenuSubButton>{snippet.name}</SidebarMenuSubButton>
+          </SidebarMenuSubItem>
+        ))
+      )}
+    </SidebarMenuSub>
   );
 };

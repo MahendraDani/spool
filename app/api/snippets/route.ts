@@ -26,7 +26,7 @@ export const GET = (req: NextRequest) => {
           message : "No snippets exists in requested folder."
         })
       }
-
+      
       return NextResponse.json({
         snippets,
         message : "Snippets fetched successfully"
