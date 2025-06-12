@@ -5,149 +5,110 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { SidebarCollapseTrigger } from "../sidebar-collapse-trigger";
-import { Check, ChevronDown } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ChevronDown } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "./separator";
-import Link from "next/link";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
-import { cn } from "@/lib/utils";
-import { useWorkspaces } from "@/swr/use-workspaces";
-import { usePathname } from "next/navigation";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { WorkspaceList } from "../workspace-list";
+import { TWorkspaceWithCountAndFolders } from "@/lib/types";
 
 export const WorkspaceDropdown = ({
-  activeWorkspaceName,
-  activeWorkspaceSlug,
+  activeWorkspace,
 }: {
-  activeWorkspaceName: string;
-  activeWorkspaceSlug: string;
+  activeWorkspace: TWorkspaceWithCountAndFolders["workspace"];
 }) => {
   const { isMobile } = useMediaQuery();
-  const { data: workspaces, isLoading } = useWorkspaces();
-  const pathname = usePathname();
-
-  if(isLoading){
-    return <div>loading</div>
-  }
 
   if (isMobile) {
     return (
       <Drawer>
-        <DrawerTrigger asChild>
-          <div className="w-full px-1 py-0.5 flex justify-between items-center gap-2 hover:bg-accent/60 cursor-pointer rounded-sm">
-            <div className="flex justify-start items-center gap-2">
-              <ChevronDown className="size-4" />
-              <p className="line-clamp-1 text-sm font-medium">
-                {activeWorkspaceName}
-              </p>
+        <div className="flex px-1 py-0.5 hover:bg-accent/60 cursor-pointer rounded-sm">
+          <DrawerTrigger asChild>
+            <div className="w-full flex justify-between items-center gap-2 relative">
+              <div className="flex justify-start items-center gap-2">
+                <ChevronDown className="size-4" />
+                <p className="line-clamp-1 font-medium">
+                  {activeWorkspace.name}
+                </p>
+              </div>
             </div>
-            <div className="group-hover:visible invisible">
-              <SidebarCollapseTrigger />
-            </div>
+          </DrawerTrigger>
+          <div className="group-hover:visible invisible">
+            <SidebarCollapseTrigger />
           </div>
-        </DrawerTrigger>
+        </div>
         <DrawerContent>
           <div>
             <div className="p-3 flex justify-start items-start gap-2">
               <Avatar className="rounded-sm size-10">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>{activeWorkspaceName.charAt(0)}</AvatarFallback>
+                {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+                <AvatarFallback className="rounded-sm">
+                  {activeWorkspace.name.charAt(0)}
+                </AvatarFallback>
               </Avatar>
-              <div className="text-sm">
+              <div>
                 <DrawerTitle className="font-medium line-clamp-1">
-                  {activeWorkspaceName}
+                  {activeWorkspace.name}
                 </DrawerTitle>
-                <p className="text-muted-foreground">{activeWorkspaceSlug}</p>
+                <div className="text-sm flex justify-start items-center gap-2">
+                  <p className="text-muted-foreground">{`Folders: ${activeWorkspace._count.folders}`}</p>
+                  <p className="text-muted-foreground">{`Snippets: ${activeWorkspace._count.snippets}`}</p>
+                </div>
               </div>
             </div>
           </div>
           <Separator className="w-full" />
-          <div className="p-2 space-y-1">
-            <p className="text-sm text-muted-foreground">Workspaces</p>
-            {workspaces?.map((workspace, idx) => (
-              <WorkspaceLink
-                key={idx}
-                href={workspace.slug}
-                workspaceName={workspace.name}
-                isActiveWorkspace={workspace.slug === activeWorkspaceSlug}
-              />
-            ))}
-          </div>
+          <WorkspaceList activeWorkspaceSlug={activeWorkspace.slug} />
         </DrawerContent>
       </Drawer>
     );
   }
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <div className="w-full px-1 py-0.5 flex justify-between items-center gap-2 hover:bg-accent/60 cursor-pointer">
-          <div className="flex justify-start items-center gap-2">
-            <ChevronDown className="size-4" />
-            <p className="line-clamp-1 text-sm font-medium">
-              {activeWorkspaceName}
-            </p>
+      <div className="flex px-1 py-0.5 hover:bg-accent/60 cursor-pointer rounded-sm">
+        <PopoverTrigger asChild>
+          <div className="w-full flex justify-between items-center gap-2 relative">
+            <div className="flex justify-start items-center gap-2">
+              <ChevronDown className="size-4" />
+              <p className="line-clamp-1 font-medium">
+                {activeWorkspace.name}
+              </p>
+            </div>
           </div>
-          <div className="group-hover:visible invisible">
-            <SidebarCollapseTrigger />
-          </div>
+        </PopoverTrigger>
+        <div className="group-hover:visible invisible">
+          <SidebarCollapseTrigger />
         </div>
-      </PopoverTrigger>
+      </div>
       <PopoverContent className="ml-2 p-0">
         <div>
           <div className="p-3 flex justify-start items-start gap-2">
             <Avatar className="rounded-sm size-10">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>{activeWorkspaceName.charAt(0)}</AvatarFallback>
+              {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+              <AvatarFallback className="rounded-sm">
+                {activeWorkspace.name.charAt(0)}
+              </AvatarFallback>
             </Avatar>
-            <div className="text-sm">
+            <div>
               <h2 className="font-medium line-clamp-1">
-                {activeWorkspaceName}
+                {activeWorkspace.name}
               </h2>
-              <p className="text-muted-foreground">{activeWorkspaceSlug}</p>
+              <div className="text-sm flex justify-start items-center gap-2">
+                <p className="text-muted-foreground">{`Folders: ${activeWorkspace._count.folders}`}</p>
+                <p className="text-muted-foreground">{`Snippets: ${activeWorkspace._count.snippets}`}</p>
+              </div>
             </div>
           </div>
         </div>
         <Separator className="w-full" />
-        <div className="p-2 space-y-1">
-          <p className="text-sm text-muted-foreground">Workspaces</p>
-          {workspaces?.map((workspace, idx) => (
-            <WorkspaceLink
-              key={idx}
-              href={workspace.slug}
-              workspaceName={workspace.name}
-              isActiveWorkspace={pathname.includes(workspace.slug)}
-            />
-          ))}
-        </div>
+        <WorkspaceList activeWorkspaceSlug={activeWorkspace.slug} />
       </PopoverContent>
     </Popover>
-  );
-};
-
-const WorkspaceLink = ({
-  href,
-  workspaceName,
-  isActiveWorkspace,
-}: {
-  href: string;
-  isActiveWorkspace: boolean;
-  workspaceName: string;
-}) => {
-  return (
-    <Link
-      href={href}
-      className={cn(
-        "text-sm p-1 flex justify-start items-center gap-2 relative",
-        isActiveWorkspace ? "bg-accent" : "hover:bg-accent"
-      )}
-    >
-      <Avatar className="rounded-sm size-5">
-        <AvatarFallback className="rounded-sm">
-          {workspaceName.charAt(0)}
-        </AvatarFallback>
-      </Avatar>
-      <p>{workspaceName}</p>
-      {isActiveWorkspace && <Check className="size-4 absolute right-2" />}
-    </Link>
   );
 };

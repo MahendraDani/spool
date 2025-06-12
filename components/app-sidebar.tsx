@@ -22,7 +22,7 @@ export function AppSidebar({workspace} : {workspace : TWorkspaceWithCountAndFold
   return (
     <Sidebar>
       <SidebarHeader className="group">
-        <WorkspaceDropdown activeWorkspaceName={workspace.name} activeWorkspaceSlug={workspace.slug}/>
+        <WorkspaceDropdown activeWorkspace={workspace}/>
       </SidebarHeader>
       <SidebarSeparator />
       <SidebarContent>
