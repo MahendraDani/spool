@@ -26,7 +26,7 @@ export const WorkspaceList = ({
         workspaces.map((workspace, idx) => (
           <WorkspaceLink
             key={idx}
-            href={workspace.slug}
+            href={`/${workspace.slug}`}
             workspaceName={workspace.name}
             isActiveWorkspace={activeWorkspaceSlug === workspace.slug}
           />

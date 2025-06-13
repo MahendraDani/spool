@@ -40,3 +40,8 @@ export function formatTimestamp(date: Date): string {
     return format(date, 'MMM d, yyyy');
   }
 }
+
+
+export function formatDateWithTimezone(date : Date) {
+  return format(date, "MMMM dd, yyyy 'at' h:mm:ss a 'GMT'xxx");
+}

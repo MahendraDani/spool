@@ -7,30 +7,32 @@ export type TWorkspaceWithCount = Prisma.WorkspaceGetPayload<{
 }>;
 
 export type TWorkspaceWithCountAndFolders = {
-  workspace : Prisma.WorkspaceGetPayload<{
+  workspace: Prisma.WorkspaceGetPayload<{
     include: {
       folders: {
-        include : {
-          _count : true
-        }
+        include: {
+          _count: true;
+        };
       };
       snippets: true;
       _count: true;
     };
   }>;
-  message : string;
-}
+  message: string;
+};
 
 export type TSnippetsOfFolder = {
-  snippets : Prisma.SnippetGetPayload<true>[],
-  message : string
-}
+  snippets: Prisma.SnippetGetPayload<true>[];
+  message: string;
+};
+
+export type TFolderOfWorkspace = Prisma.FolderGetPayload<{
+  include: {
+    _count: true;
+  };
+}>;
 
 export type TFoldersOfWorkspace = {
-  data : Prisma.FolderGetPayload<{
-    include : {
-      _count : true
-    }
-  }>[]
-  message : string
-}
+  data: TFolderOfWorkspace[];
+  message: string;
+};
