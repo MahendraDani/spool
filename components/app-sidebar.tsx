@@ -1,5 +1,11 @@
 "use client";
-import { FolderClosed, FolderOpen, Plus } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  FolderClosed,
+  FolderOpen,
+  Plus,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -62,8 +68,11 @@ export function AppSidebar({
                   <SidebarMenuItem className="group/menu-item">
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton className="cursor-pointer">
-                        <FolderClosed className="group-data-[state=open]/collapsible:hidden block" />
-                        <FolderOpen className="group-data-[state=open]/collapsible:block hidden" />
+                        <FolderClosed className="group-data-[state=open]/collapsible:hidden group-hover/menu-item:hidden block" />
+                        <FolderOpen className="group-hover/menu-item:group-data-[state=open]/collapsible:hidden group-data-[state=open]/collapsible:block hidden" />
+
+                        <ChevronRight className="group-hover/menu-item:block group-data-[state=open]/collapsible:hidden hidden" />
+                        <ChevronDown className="group-hover/menu-item:block group-data-[state=closed]/collapsible:hidden hidden" />
                         {folder.name}
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
@@ -84,7 +93,7 @@ export function AppSidebar({
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton className="text-muted-foreground">
-                  <Plus/>
+                  <Plus />
                   <span>New folder</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
