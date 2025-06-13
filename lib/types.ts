@@ -25,3 +25,12 @@ export type TSnippetsOfFolder = {
   snippets : Prisma.SnippetGetPayload<true>[],
   message : string
 }
+
+export type TFoldersOfWorkspace = {
+  data : Prisma.FolderGetPayload<{
+    include : {
+      _count : true
+    }
+  }>[]
+  message : string
+}

@@ -10,7 +10,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 
 export const MainLayout = ({ children }: { children: ReactNode }) => {
   const { data, error, isLoading } = useWorkspace();
-  const {isDesktop} = useMediaQuery();
+  const { isDesktop } = useMediaQuery();
 
   if (isLoading) {
     return (
@@ -34,10 +34,12 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
         <AppSidebar workspace={data.workspace} />
       </div>
       <div className="w-full">
-        <div className="p-2">
-          <MainNavbar />
-        </div>
-        <main className="p-1">{children}</main>
+        <main className="p-2 space-y-3">
+          <div className="p-1.5 border rounded-md">
+            <MainNavbar />
+          </div>
+          {children}
+        </main>
       </div>
     </SidebarProvider>
   );
