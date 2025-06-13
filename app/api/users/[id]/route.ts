@@ -15,13 +15,12 @@ export const GET = (req: NextRequest) => {
   return withSession(req, async () => {
     try {
       const userId = req.nextUrl.pathname.split("users/")[1];
-      console.log(userId);
       const user = await prisma.user.findUnique({
         where: {
           id: userId,
         },
       });
-
+      
       if (!user) {
         throw new SpoolAPIError({
           status: "not_found",

@@ -18,14 +18,19 @@ export const GET = (req: NextRequest) => {
       const folders = await prisma.folder.findMany({
         where: {
           ownerId: user.id,
-          workspaceId : workspace.id
+          workspaceId: workspace.id,
         },
         orderBy: {
           createdAt: "desc",
         },
-        include : {
-          _count : true
-        }
+        include: {
+          _count: true,
+          owner: {
+            select: {
+              username: true,
+            },
+          },
+        },
       });
 
       if (!folders) {

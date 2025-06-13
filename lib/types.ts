@@ -29,6 +29,11 @@ export type TSnippetsOfFolder = {
 export type TFolderOfWorkspace = Prisma.FolderGetPayload<{
   include: {
     _count: true;
+    owner: {
+      select: {
+        username: true;
+      };
+    };
   };
 }>;
 

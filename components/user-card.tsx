@@ -1,9 +1,9 @@
 "use client";
-import { useUser } from "@/swr/use-user";
+import { useMe } from "@/swr/use-user";
 
 export const UserCard = () => {
 
-  const {data,isLoading,error} = useUser();
+  const {data,isLoading,error} = useMe();
 
   return (
     <div>
