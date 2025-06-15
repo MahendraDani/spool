@@ -1,16 +1,28 @@
 "use client";
+import { fetcher } from "@/lib/fetcher";
+import { Prisma } from "@prisma/client";
 import useSWR from "swr";
 
-export const useUser = ()=>{
+export const useMe = () => {
+  const { isLoading, error, data } = useSWR("/api/me", fetcher);
 
-  const { isLoading, error, data } = useSWR("/api/me", (...args) =>
-    fetch(...args).then((res) => res.json())
-  );
-  
   // TODO : return the component that renders data directly from the hook to be reused throughout the app
   return {
     isLoading,
     error,
-    data
-  }
-}
+    data,
+  };
+};
+
+export const useUser = ({ userId }: { userId: string }) => {
+  const { isLoading, mutate, error, data } = useSWR<{
+    data: Prisma.UserGetPayload<true>;
+    message: string;
+  }>(`/api/users/${userId}`, fetcher);
+  return {
+    isLoading,
+    error,
+    data,
+    mutate,
+  };
+};

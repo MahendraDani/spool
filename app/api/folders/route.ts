@@ -23,6 +23,14 @@ export const GET = (req: NextRequest) => {
         orderBy: {
           createdAt: "desc",
         },
+        include: {
+          _count: true,
+          owner: {
+            select: {
+              username: true,
+            },
+          },
+        },
       });
 
       if (!folders) {

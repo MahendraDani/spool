@@ -68,6 +68,7 @@ export const POST = async (req: NextRequest) => {
 // GET /api/workspaces - get all workspaces of current user
 export const GET = async (req: NextRequest) => {
   return withSession(req, async ({ user }) => {
+
     try {
       const workspaces = await prisma.workspace.findMany({
         where: {

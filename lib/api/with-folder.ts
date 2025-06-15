@@ -1,4 +1,4 @@
-import { Prisma, Workspace } from "@prisma/client";
+import { Folder, Prisma, Workspace } from "@prisma/client";
 import { User, Session } from "better-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { SpoolAPIError } from "./error";
@@ -9,7 +9,7 @@ import {
 } from "./error-handler";
 import { prisma } from "../prisma";
 
-type TWorkspaceRouteHandler = ({
+type TFolderRouteHandler = ({
   user,
   session,
   workspace,
@@ -17,11 +17,12 @@ type TWorkspaceRouteHandler = ({
   user: User;
   session: Session;
   workspace: Workspace;
+  folder: Folder;
 }) => Promise<NextResponse>;
 
-export const withWorkspace = async (
+export const withFolder = async (
   req: NextRequest,
-  handler: TWorkspaceRouteHandler
+  handler: TFolderRouteHandler
 ) => {
   try {
     if (!req.headers.get("Cookie")) {
@@ -52,7 +53,7 @@ export const withWorkspace = async (
     const workspace = await prisma.workspace.findUnique({
       where: {
         slug: workspaceSlug,
-        ownerId : session.user.id
+        ownerId: session.user.id,
       },
     });
 
@@ -70,10 +71,34 @@ export const withWorkspace = async (
       });
     }
 
+    const folderSlug = req.nextUrl.searchParams.get("folderSlug");
+    if (!folderSlug) {
+      throw new SpoolAPIError({
+        status: "bad_request",
+        message: "Missing folder slug. Please add folderSlug in search params",
+      });
+    }
+
+    const folder = await prisma.folder.findFirst({
+      where: {
+        workspaceId: workspace.id,
+        slug: folderSlug,
+        ownerId: session.user.id,
+      },
+    });
+
+    if (!folder) {
+      throw new SpoolAPIError({
+        status: "not_found",
+        message: `The requested folder with slug ${folderSlug} could not be found`,
+      });
+    }
+
     return await handler({
       user: session.user,
       session: session.session,
       workspace,
+      folder,
     });
   } catch (error) {
     if (error instanceof SpoolAPIError) {

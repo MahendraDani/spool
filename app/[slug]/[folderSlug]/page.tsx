@@ -6,7 +6,7 @@ export default async function Page({
   const {username,slug,folderSlug} = await params;
   // validations for auth, workspace permission and folder permissions
   return (
-    <div className="container">
+    <div>
       <p>{username} / {slug} / {folderSlug}</p>
     </div>
   )

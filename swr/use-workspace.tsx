@@ -1,16 +1,22 @@
 "use client";
 import { fetcher } from "@/lib/fetcher";
-import { TWorkspaceWithCount } from "@/lib/types";
+import { TWorkspaceWithCountAndFolders } from "@/lib/types";
+import { useParams } from "next/navigation";
 import useSWR from "swr";
 
-export const useWorkspace = ()=>{
+export const useWorkspace = () => {
+  const { slug } = useParams() as {
+    slug: string;
+  };
+  const { isLoading, error, data } =
+    useSWR<TWorkspaceWithCountAndFolders>(
+      slug && `/api/workspaces/${slug}`,
+      fetcher
+    );
 
-  const { isLoading, error, data } = useSWR<TWorkspaceWithCount[]>("/api/workspaces", fetcher);
-  
-  // TODO : return the component that renders data directly from the hook to be reused throughout the app
   return {
     isLoading,
     error,
-    data
-  }
-}
+    data,
+  };
+};

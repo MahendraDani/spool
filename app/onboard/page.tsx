@@ -29,15 +29,18 @@ export default async function Page() {
     redirect("/");
   }
 
-  const workspaceCount = await prisma.workspace.count({
-    where: {
-      ownerId: session.user.id,
-    },
-  });
 
-  if (workspaceCount > 0) {
-    // if not first time user
-    redirect(`/${session.user.username}`);
+  const workspaces = await prisma.workspace.findMany({
+    where : {
+      ownerId : session.user.id,
+    },
+    orderBy : {
+      updatedAt : "desc"
+    }
+  })
+  if (workspaces.length > 0) {
+    // TODO : open the same workspace which was last used by user
+    redirect(`/${workspaces[0].slug}`);
   }
 
   const user = await prisma.user.findUnique({
