@@ -48,20 +48,27 @@ export function AppSidebar({
       <SidebarSeparator />
       <SidebarContent>
         <SidebarGroup>
-          <Tooltip>
-            <SidebarGroupLabel>Folders</SidebarGroupLabel>
-            <TooltipTrigger asChild>
-              <SidebarGroupAction
-                title="Add folder"
-                className="cursor-pointer text-muted-foreground"
-              >
-                <Plus /> <span className="sr-only">Add folderf</span>
-              </SidebarGroupAction>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Add folder</p>
-            </TooltipContent>
-          </Tooltip>
+          <SidebarGroupLabel>Folders</SidebarGroupLabel>
+          <AddFolderModal>
+            <Tooltip>
+              <AddFolderModal.Trigger>
+                <SidebarGroupAction
+                  title="Add folder"
+                  className="cursor-pointer text-muted-foreground"
+                >
+                  <TooltipTrigger asChild>
+                    <div>
+                      <Plus className="size-4" />
+                    </div>
+                  </TooltipTrigger>
+                </SidebarGroupAction>
+              </AddFolderModal.Trigger>
+              <TooltipContent>
+                <p>Add folder</p>
+              </TooltipContent>
+              <AddFolderModal.Content />
+            </Tooltip>
+          </AddFolderModal>
           <SidebarGroupContent>
             {workspace.folders.map((folder, idx) => (
               <SidebarMenu key={idx}>
@@ -93,17 +100,11 @@ export function AppSidebar({
             ))}
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton className="text-muted-foreground">
-                  <Plus />
-                  <span>New folder</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
                 <AddFolderModal>
                   <AddFolderModal.Trigger>
                     <SidebarMenuButton className="text-muted-foreground">
                       <Plus />
-                      <span>Adddd new folder</span>
+                      <span>New folder</span>
                     </SidebarMenuButton>
                   </AddFolderModal.Trigger>
                   <AddFolderModal.Content />

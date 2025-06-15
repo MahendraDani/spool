@@ -35,6 +35,9 @@ export const GET = async (
           folders : {
             include : {
               _count : true
+            },
+            orderBy : {
+              updatedAt : "desc"
             }
           },
           _count : true,
