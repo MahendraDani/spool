@@ -35,6 +35,8 @@ import { Button } from "../ui/button";
 import { useParams } from "next/navigation";
 import { useSession } from "@/hooks/use-session";
 import { toast } from "sonner";
+import React from "react";
+import { mutate } from "swr";
 
 const AddFolderModalTrigger = ({ children }: { children: ReactNode }) => {
   const { isMobile } = useMediaQuery();
@@ -44,14 +46,44 @@ const AddFolderModalTrigger = ({ children }: { children: ReactNode }) => {
   return <DialogTrigger asChild>{children}</DialogTrigger>;
 };
 
+type TAddFolderModalContext = {
+  showAddFolderModal: boolean;
+  setShowAddFolderModal: (open: boolean) => void;
+};
+
+const AddFolderModalContext = React.createContext<TAddFolderModalContext | undefined>(undefined);
+
 export const AddFolderModal = ({ children }: { children: ReactNode }) => {
-  
+  const [showAddFolderModal, setShowAddFolderModal] = React.useState(false);
   const { isMobile } = useMediaQuery();
+  
+  const contextValue = React.useMemo(() => ({ showAddFolderModal, setShowAddFolderModal }), [showAddFolderModal]);
+
   if (isMobile) {
-    return <Drawer>{children}</Drawer>;
+    return (
+      <AddFolderModalContext.Provider value={contextValue}>
+        <Drawer open={showAddFolderModal} onOpenChange={setShowAddFolderModal}>
+          {children}
+        </Drawer>
+      </AddFolderModalContext.Provider>
+    );
   }
 
-  return <Dialog>{children}</Dialog>;
+  return (
+    <AddFolderModalContext.Provider value={contextValue}>
+      <Dialog open={showAddFolderModal} onOpenChange={setShowAddFolderModal}>
+        {children}
+      </Dialog>
+    </AddFolderModalContext.Provider>
+  );
+};
+
+const useAddFolderModalContext = () => {
+  const context = React.useContext(AddFolderModalContext);
+  if (!context) {
+    throw new Error('useAddFolderModal must be used within AddFolderModal');
+  }
+  return context;
 };
 
 const AddFolderModalContent = () => {
@@ -60,6 +92,7 @@ const AddFolderModalContent = () => {
     slug: string;
   };
   const { session } = useSession();
+  const { setShowAddFolderModal } = useAddFolderModalContext();
 
   const form = useForm<z.infer<typeof ZCreateFolderSchema>>({
     resolver: zodResolver(ZCreateFolderSchema),
@@ -81,10 +114,16 @@ const AddFolderModalContent = () => {
 
     if (!res.ok) {
       toast.error("some error");
+      return;
     }
 
     const response = await res.json();
+    mutate(`/api/folders?slug=${slug}`);
+    mutate(`/api/workspaces/${slug}`);
     console.log(response);
+    toast.success("Folder created successfully");
+    form.reset();
+    setShowAddFolderModal(false);
   }
 
   if (isMobile) {
