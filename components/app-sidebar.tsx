@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/tooltip";
 import { SidebarFolderGroupAction } from "./ui/sidebar-folder-group-action";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { AddFolderModal } from "./folders/add-folder-modal";
 
 export function AppSidebar({
   workspace,
@@ -96,6 +97,17 @@ export function AppSidebar({
                   <Plus />
                   <span>New folder</span>
                 </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <AddFolderModal>
+                  <AddFolderModal.Trigger>
+                    <SidebarMenuButton className="text-muted-foreground">
+                      <Plus />
+                      <span>Adddd new folder</span>
+                    </SidebarMenuButton>
+                  </AddFolderModal.Trigger>
+                  <AddFolderModal.Content />
+                </AddFolderModal>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>

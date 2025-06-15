@@ -51,10 +51,8 @@ const FolderListItem = ({ folder }: { folder: TFolderOfWorkspace }) => {
       <CardHeader className="-mb-2 p-0">
         <div>
           <CardTitle className="flex justify-start items-center gap-2">
-            <Link href={`/${slug}/${folder.slug}`} className="hover:underline">
-              <p className="text-base font-semibold">
-                {folder.name}
-              </p>
+            <Link href={`/${slug}/${folder.slug}`} className="hover:underline underline-offset-4">
+              <p className="text-base font-medium">{folder.name}</p>
             </Link>
             {folder.description && (
               <HoverCard>
