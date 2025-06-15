@@ -54,13 +54,7 @@ export const ZCreateFolderSchema = z.object({
       message:
         'Folder name can not contain characters like < > : " / \\ | ? * and should not start or end with a dot or space. Spaces are allowed',
     }),
-  description: z.string().optional(),
-  slug: z
-    .string()
-    .refine((val) => validSlugRegex.test(val), {
-      message:
-        "Slugs can only contain letters, numbers, and hyphens. No spaces or special characters are allowed",
-    }).optional()
+  description: z.string().optional()
 });
 
 export const ZSlugSchema = z.object({

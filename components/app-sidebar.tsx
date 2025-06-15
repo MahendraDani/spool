@@ -32,13 +32,16 @@ import {
 } from "@/components/ui/tooltip";
 import { SidebarFolderGroupAction } from "./ui/sidebar-folder-group-action";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { AddFolderModalForm } from "./folders/add-folder-form";
+import { ResponsiveModal } from "./responsive-modal";
+import { cn } from "@/lib/utils";
 
 export function AppSidebar({
   workspace,
 }: {
   workspace: TWorkspaceWithCountAndFolders["workspace"];
 }) {
-  const { isDesktop } = useMediaQuery();
+  const { isDesktop, isMobile } = useMediaQuery();
   return (
     <Sidebar variant="floating">
       <SidebarHeader className="group">
@@ -47,20 +50,42 @@ export function AppSidebar({
       <SidebarSeparator />
       <SidebarContent>
         <SidebarGroup>
-          <Tooltip>
-            <SidebarGroupLabel>Folders</SidebarGroupLabel>
-            <TooltipTrigger asChild>
-              <SidebarGroupAction
-                title="Add folder"
-                className="cursor-pointer text-muted-foreground"
+          <SidebarGroupLabel>Folders</SidebarGroupLabel>
+          <ResponsiveModal>
+            <Tooltip>
+              <ResponsiveModal.Trigger>
+                <SidebarGroupAction
+                  title="Add folder"
+                  className="cursor-pointer text-muted-foreground"
+                >
+                  <TooltipTrigger asChild>
+                    <div>
+                      <Plus className="size-4" />
+                    </div>
+                  </TooltipTrigger>
+                </SidebarGroupAction>
+              </ResponsiveModal.Trigger>
+              <TooltipContent>
+                <p>Add folder</p>
+              </TooltipContent>
+            </Tooltip>
+            <ResponsiveModal.Content className={cn(!isMobile && "p-0 w-md")}>
+              <ResponsiveModal.Header
+                className={cn(
+                  isMobile
+                    ? "px-4"
+                    : "bg-secondary p-6 rounded-tr-sm rounded-tl-sm"
+                )}
               >
-                <Plus /> <span className="sr-only">Add folderf</span>
-              </SidebarGroupAction>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Add folder</p>
-            </TooltipContent>
-          </Tooltip>
+                <ResponsiveModal.Title>Create new folder</ResponsiveModal.Title>
+                <ResponsiveModal.Description>
+                  Folders can be utilized to organize and manage related
+                  snippets, facilitating easier access and administration.
+                </ResponsiveModal.Description>
+              </ResponsiveModal.Header>
+              <AddFolderModalForm />
+            </ResponsiveModal.Content>
+          </ResponsiveModal>
           <SidebarGroupContent>
             {workspace.folders.map((folder, idx) => (
               <SidebarMenu key={idx}>
@@ -92,10 +117,34 @@ export function AppSidebar({
             ))}
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton className="text-muted-foreground">
-                  <Plus />
-                  <span>New folder</span>
-                </SidebarMenuButton>
+                <ResponsiveModal>
+                  <ResponsiveModal.Trigger>
+                    <SidebarMenuButton className="text-muted-foreground">
+                      <Plus />
+                      <span>New folder</span>
+                    </SidebarMenuButton>
+                  </ResponsiveModal.Trigger>
+                  <ResponsiveModal.Content
+                    className={cn(!isMobile && "p-0 w-md")}
+                  >
+                    <ResponsiveModal.Header
+                      className={cn(
+                        isMobile
+                          ? "px-4"
+                          : "bg-secondary p-6 rounded-tr-sm rounded-tl-sm"
+                      )}
+                    >
+                      <ResponsiveModal.Title>
+                        Create new folder
+                      </ResponsiveModal.Title>
+                      <ResponsiveModal.Description>
+                        Folders can be utilized to organize and manage related
+                        snippets, facilitating easier access and administration.
+                      </ResponsiveModal.Description>
+                    </ResponsiveModal.Header>
+                    <AddFolderModalForm />
+                  </ResponsiveModal.Content>
+                </ResponsiveModal>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
