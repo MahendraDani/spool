@@ -64,7 +64,7 @@ export const GET = (req: NextRequest) => {
 export const POST = (req: NextRequest) => {
   return withWorkspace(req, async ({ user, workspace }) => {
     try {
-      const { name, description } = await ZCreateFolderSchema.parseAsync(
+      const { name, description, slug } = await ZCreateFolderSchema.parseAsync(
         await req.json()
       );
 
@@ -84,7 +84,7 @@ export const POST = (req: NextRequest) => {
       const folder = await prisma.folder.create({
         data: {
           name,
-          slug: slugify(name),
+          slug: slug || slugify(name),
           description,
           ownerId: user.id,
           workspaceId: workspace.id,

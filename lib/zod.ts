@@ -33,22 +33,34 @@ export const ZCreateWorkspaceSchema = z.object({
     }),
 });
 
+/*
+Validates a string against specific naming rules
+ * Rules:
+ * 1. Must not begin with '.'
+ * 2. Must not end with '.'
+ * 3. Must not include special characters like !@#$%^&*, but can include '.'
+ * 4. Must not include two dots '..' side by side
+ * 5. Allow spaces and hyphens between characters
+*/
+const FOLDER_NAME_REGEX =
+  /^[a-zA-Z0-9\s-](?:[a-zA-Z0-9\s.-](?!\.))*[a-zA-Z0-9\s-]$|^[a-zA-Z0-9\s-]$/;
+
 export const ZCreateFolderSchema = z.object({
   name: z
     .string()
     .min(1, { message: "Name is required" })
     .max(50, { message: "Name must be less than 50 characters" })
-    .refine(
-      (val) =>
-        /^[^<>:"/\\|?*\x00-\x1F\s.][^<>:"/\\|?*\x00-\x1F\s]*[^<>:"/\\|?*\x00-\x1F\s.]$/.test(
-          val
-        ),
-      {
-        message:
-          'Folder name can not contain spaces or characters like < > : " / \\ | ? * and should not start or end with a dot or space.',
-      }
-    ),
+    .refine((val) => FOLDER_NAME_REGEX.test(val), {
+      message:
+        'Folder name can not contain characters like < > : " / \\ | ? * and should not start or end with a dot or space. Spaces are allowed',
+    }),
   description: z.string().optional(),
+  slug: z
+    .string()
+    .refine((val) => validSlugRegex.test(val), {
+      message:
+        "Slugs can only contain letters, numbers, and hyphens. No spaces or special characters are allowed",
+    }).optional()
 });
 
 export const ZSlugSchema = z.object({
