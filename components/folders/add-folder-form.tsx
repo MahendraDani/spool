@@ -77,7 +77,7 @@ export const AddFolderModalForm = () => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Project Ideas" {...field} />
+                    <Input placeholder="Rust snippets" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -91,7 +91,7 @@ export const AddFolderModalForm = () => {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Snippets for my crazy thoughts"
+                      placeholder="Add description for your folder (optional)."
                       {...field}
                     />
                   </FormControl>
