@@ -99,14 +99,14 @@ model Workspace {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@unique([ownerId, name]) // unique workspace name for each user
-  @@map("workspace")
   @@index([ownerId])
+  @@map("workspace")
 }
 
 model Folder {
   id          String  @id @default(cuid())
   name        String
-  slug        String
+  slug        String  @unique
   description String?
 
   // relations
@@ -122,14 +122,14 @@ model Folder {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@unique([workspaceId, slug]) // unique folder slug for each workspace and user
+  @@unique([workspaceId, name]) // unique folder name for each workspace and user
+  @@index([ownerId, workspaceId])
   @@map("folder")
-  @@index([ownerId,workspaceId])
 }
 
 model Snippet {
   id          String  @id @default(cuid())
-  name        String  
+  name        String
   description String?
   code        String
   public      Boolean @default(true) // by default all snips are public
@@ -148,7 +148,7 @@ model Snippet {
   stars    SnippetStar[]
 
   // counts
-  startCount Int @default(0) // denormalize from SnippetStar table => number of rows in SnippetStar
+  startCount   Int @default(0) // denormalize from SnippetStar table => number of rows in SnippetStar
   commentCount Int @default(0) // denormalize from Comment table => number of rows in Comments tables
 
   // metadata
@@ -156,8 +156,8 @@ model Snippet {
   updatedAt DateTime @updatedAt @map("updated_at")
   // expiresAt DateTime : TODO : add this field to keep expiry of 24hrs, 7 days, 30 days.
 
-  @@unique([folderId,name]) // two snips can't have same name inside a folder
-  @@index([authorId,folderId,workspaceId])
+  @@unique([folderId, name]) // two snips can't have same name inside a folder
+  @@index([authorId, folderId, workspaceId])
 }
 
 model Comment {
@@ -176,8 +176,8 @@ model Comment {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  @@index([snippetId, authorId])
   @@map("comment")
-  @@index([snippetId,authorId])
 }
 
 model CommentLike {
@@ -194,8 +194,8 @@ model CommentLike {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@unique([commentId, userId]) // a user can like a comment only once
-  @@map("comment_like")
   @@index([userId])
+  @@map("comment_like")
 }
 
 model SnippetStar {
@@ -210,7 +210,7 @@ model SnippetStar {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@unique([userId,snippetId]) // a user can star only once
-  @@map("snippet_star")
+  @@unique([userId, snippetId]) // a user can star only once
   @@index([userId])
+  @@map("snippet_star")
 }
