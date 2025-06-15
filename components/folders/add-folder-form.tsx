@@ -37,7 +37,6 @@ export const AddFolderModalForm = () => {
     defaultValues: {
       name: "",
       description: "",
-      slug: "",
     },
   });
 
@@ -50,8 +49,10 @@ export const AddFolderModalForm = () => {
       body: JSON.stringify(values),
     });
 
+    const response = await res.json();
     if (!res.ok) {
-      toast.error("some error");
+      console.log(response)
+      toast.error(response.error.message);
       return;
     }
 
@@ -77,19 +78,6 @@ export const AddFolderModalForm = () => {
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input placeholder="Project Ideas" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="slug"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Slug</FormLabel>
-                  <FormControl>
-                    <Input placeholder="project-ideas" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
