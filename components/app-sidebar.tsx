@@ -30,7 +30,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { SidebarFolderGroupAction } from "./ui/sidebar-folder-group-action";
+import { FolderActionMenu } from "./folders/folder-action-menu";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { AddFolderModalForm } from "./folders/add-folder-form";
 import { ResponsiveModal } from "./responsive-modal";
@@ -110,7 +110,7 @@ export function AppSidebar({
                         {folder._count.snippets}
                       </SidebarMenuBadge>
                     )}
-                    <SidebarFolderGroupAction />
+                    <FolderActionMenu withinSidebar />
                   </SidebarMenuItem>
                 </Collapsible>
               </SidebarMenu>

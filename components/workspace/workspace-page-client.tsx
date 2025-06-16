@@ -22,10 +22,11 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { MoreHorizontal, NotepadText, Clock, User } from "lucide-react";
+import { NotepadText, Clock, User } from "lucide-react";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
 import { UserHoverCard } from "../ui/user-hover-card";
+import { FolderActionMenu } from "../folders/folder-action-menu";
 
 export const WorkspacePageClient = () => {
   const { isLoading, data: folders } = useFoldersOfWorkspace();
@@ -131,9 +132,7 @@ const FolderListItem = ({ folder }: { folder: TFolderOfWorkspace }) => {
               folder._count.snippets !== 1 ? "s" : ""
             }`}
           </Badge>
-          <div className="p-1.5 cursor-pointer hover:bg-accent rounded-md transition-colors">
-            <MoreHorizontal className="size-4" />
-          </div>
+          <FolderActionMenu/>
         </CardAction>
       </CardHeader>
     </Card>
