@@ -42,7 +42,7 @@ Validates a string against specific naming rules
  * 4. Must not include two dots '..' side by side
  * 5. Allow spaces and hyphens between characters
 */
-const FOLDER_NAME_REGEX =
+export const FOLDER_NAME_REGEX =
   /^[a-zA-Z0-9\s-](?:[a-zA-Z0-9\s.-](?!\.))*[a-zA-Z0-9\s-]$|^[a-zA-Z0-9\s-]$/;
 
 export const ZCreateFolderSchema = z.object({

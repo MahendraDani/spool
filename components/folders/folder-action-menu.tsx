@@ -16,12 +16,15 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from "../ui/button";
-import { DeleteFolderResponsiveAlertDialog } from "./delete-folder-alert-dialog";
+import { DeleteFolderResponsiveModal } from "./delete-folder-modal";
+import { TFolderWithCount } from "@/lib/types";
 
 export const FolderActionMenu = ({
   withinSidebar = false,
+  folder,
 }: {
   withinSidebar?: boolean;
+  folder: TFolderWithCount;
 }) => {
   const { isMobile } = useMediaQuery();
 
@@ -43,10 +46,10 @@ export const FolderActionMenu = ({
           <DrawerHeader>
             <DrawerTitle>Folder Actions</DrawerTitle>
           </DrawerHeader>
-          <div className="grid grid-cols-1 space-y-2 p-2">
+          <div className="grid grid-cols-1 space-y-2 p-6">
             <Button variant={"secondary"}>Open</Button>
             <Button variant={"secondary"}>Edit</Button>
-            <Button variant={"secondary"}>Delete</Button>
+            <DeleteFolderResponsiveModal folder={folder} />
           </div>
         </DrawerContent>
       </Drawer>
@@ -72,7 +75,7 @@ export const FolderActionMenu = ({
         <DropdownMenuItem>
           <span>Edit</span>
         </DropdownMenuItem>
-        <DeleteFolderResponsiveAlertDialog />
+        <DeleteFolderResponsiveModal folder={folder} />
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -132,7 +132,7 @@ const FolderListItem = ({ folder }: { folder: TFolderOfWorkspace }) => {
               folder._count.snippets !== 1 ? "s" : ""
             }`}
           </Badge>
-          <FolderActionMenu/>
+          <FolderActionMenu folder={folder}/>
         </CardAction>
       </CardHeader>
     </Card>

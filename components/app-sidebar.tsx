@@ -110,7 +110,7 @@ export function AppSidebar({
                         {folder._count.snippets}
                       </SidebarMenuBadge>
                     )}
-                    <FolderActionMenu withinSidebar />
+                    <FolderActionMenu withinSidebar folder={folder} />
                   </SidebarMenuItem>
                 </Collapsible>
               </SidebarMenu>
