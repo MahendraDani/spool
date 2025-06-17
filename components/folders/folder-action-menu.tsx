@@ -18,6 +18,7 @@ import {
 import { Button } from "../ui/button";
 import { DeleteFolderResponsiveModal } from "./delete-folder-modal";
 import { TFolderWithCount } from "@/lib/types";
+import { useState } from "react";
 
 export const FolderActionMenu = ({
   withinSidebar = false,
@@ -27,10 +28,11 @@ export const FolderActionMenu = ({
   folder: TFolderWithCount;
 }) => {
   const { isMobile } = useMediaQuery();
+  const [showFolderActionMenu, setShowFolderActionMenu] = useState(false);
 
   if (isMobile) {
     return (
-      <Drawer>
+      <Drawer open={showFolderActionMenu} onOpenChange={setShowFolderActionMenu}>
         <DrawerTrigger asChild>
           {withinSidebar ? (
             <SidebarMenuAction className="cursor-pointer">
@@ -49,14 +51,14 @@ export const FolderActionMenu = ({
           <div className="grid grid-cols-1 space-y-2 p-6">
             <Button variant={"secondary"}>Open</Button>
             <Button variant={"secondary"}>Edit</Button>
-            <DeleteFolderResponsiveModal folder={folder} />
+            <DeleteFolderResponsiveModal folder={folder} setShowFolderActionMenu={setShowFolderActionMenu} />
           </div>
         </DrawerContent>
       </Drawer>
     );
   }
   return (
-    <DropdownMenu>
+    <DropdownMenu open={showFolderActionMenu} onOpenChange={setShowFolderActionMenu}>
       <DropdownMenuTrigger asChild>
         {withinSidebar ? (
           <SidebarMenuAction className="cursor-pointer">
@@ -75,7 +77,7 @@ export const FolderActionMenu = ({
         <DropdownMenuItem>
           <span>Edit</span>
         </DropdownMenuItem>
-        <DeleteFolderResponsiveModal folder={folder} />
+        <DeleteFolderResponsiveModal folder={folder} setShowFolderActionMenu={setShowFolderActionMenu} />
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -10,7 +10,13 @@ import { useResponsiveModalContext } from "../responsive-modal";
 import { TFolderWithCount } from "@/lib/types";
 import { Button } from "../ui/button";
 
-export const DeleteFolderForm = ({ folder }: { folder: TFolderWithCount }) => {
+export const DeleteFolderForm = ({
+  folder,
+  setShowFolderActionMenu,
+}: {
+  folder: TFolderWithCount;
+  setShowFolderActionMenu: (showFolderActionMenu: boolean) => void;
+}) => {
   const { setShowResponsiveModal } = useResponsiveModalContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { session } = useSession();
@@ -32,14 +38,16 @@ export const DeleteFolderForm = ({ folder }: { folder: TFolderWithCount }) => {
       }
       await mutate(`/api/folders?slug=${slug}`);
       await mutate(`/api/workspaces/${slug}`);
-      setShowResponsiveModal(false);
+      setShowFolderActionMenu(false)
       toast.success("Folder deleted successfully");
     } catch (error) {
       console.log(error);
       toast.error("Error deleting folder");
+      setShowFolderActionMenu(false);
       throw new Error("Error delete folder");
     } finally {
       setIsSubmitting(false);
+      setShowResponsiveModal(false);
     }
   };
 

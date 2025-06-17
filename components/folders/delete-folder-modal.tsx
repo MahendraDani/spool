@@ -10,7 +10,9 @@ import { DeleteFolderForm } from "./delete-modal-form";
 
 export const DeleteFolderResponsiveModal = ({
   folder,
+  setShowFolderActionMenu
 }: {
+  setShowFolderActionMenu : (showFolderActionMenu : boolean) => void
   folder: TFolderWithCount;
 }) => {
   return (
@@ -31,7 +33,7 @@ export const DeleteFolderResponsiveModal = ({
           </span>{" "}
           This action can not be undone - proceed with caution.
         </div>
-        <DeleteFolderForm folder={folder} />
+        <DeleteFolderForm folder={folder} setShowFolderActionMenu={setShowFolderActionMenu} />
       </ResponsiveModal.Content>
     </ResponsiveModal>
   );
