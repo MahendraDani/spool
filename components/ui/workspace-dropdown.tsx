@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/drawer";
 import { WorkspaceList } from "../workspace-list";
 import { TWorkspaceWithCountAndFolders } from "@/lib/types";
+import { useState } from "react";
 
 export const WorkspaceDropdown = ({
   activeWorkspace,
@@ -24,10 +25,14 @@ export const WorkspaceDropdown = ({
   activeWorkspace: TWorkspaceWithCountAndFolders["workspace"];
 }) => {
   const { isMobile } = useMediaQuery();
+  const [showWorkspaceDropdown, setShowWorkspaceDropdown] = useState(false);
 
   if (isMobile) {
     return (
-      <Drawer>
+      <Drawer
+        open={showWorkspaceDropdown}
+        onOpenChange={setShowWorkspaceDropdown}
+      >
         <div className="flex px-1 py-0.5 hover:bg-accent/60 cursor-pointer rounded-sm">
           <DrawerTrigger asChild>
             <div className="w-full flex justify-between items-center gap-2 relative">
@@ -64,21 +69,25 @@ export const WorkspaceDropdown = ({
             </div>
           </div>
           <Separator className="w-full" />
-          <WorkspaceList activeWorkspaceSlug={activeWorkspace.slug} />
+          <WorkspaceList
+            activeWorkspaceSlug={activeWorkspace.slug}
+            setShowWorkspaceDropdown={setShowWorkspaceDropdown}
+          />
         </DrawerContent>
       </Drawer>
     );
   }
   return (
-    <Popover>
+    <Popover
+      open={showWorkspaceDropdown}
+      onOpenChange={setShowWorkspaceDropdown}
+    >
       <div className="flex px-1 py-0.5 hover:bg-accent/60 cursor-pointer rounded-sm">
         <PopoverTrigger asChild>
           <div className="w-full flex justify-between items-center gap-2 relative">
             <div className="flex justify-start items-center gap-2">
               <ChevronDown className="size-4" />
-              <p className="line-clamp-1 font-medium">
-                {activeWorkspace.name}
-              </p>
+              <p className="line-clamp-1 font-medium">{activeWorkspace.name}</p>
             </div>
           </div>
         </PopoverTrigger>
@@ -107,7 +116,10 @@ export const WorkspaceDropdown = ({
           </div>
         </div>
         <Separator className="w-full" />
-        <WorkspaceList activeWorkspaceSlug={activeWorkspace.slug} />
+        <WorkspaceList
+          activeWorkspaceSlug={activeWorkspace.slug}
+          setShowWorkspaceDropdown={setShowWorkspaceDropdown}
+        />
       </PopoverContent>
     </Popover>
   );

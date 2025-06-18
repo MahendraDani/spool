@@ -17,7 +17,7 @@ export const WorkspaceLink = ({
     <Link
       href={href}
       className={cn(
-        "text-sm p-1 flex justify-start items-center gap-2 relative",
+        "text-sm p-1 flex justify-start items-center gap-2 relative rounded-sm",
         isActiveWorkspace ? "bg-accent" : "hover:bg-accent"
       )}
     >
