@@ -52,7 +52,7 @@ export const DeleteFolderForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="pb-4 px-4">
+    <form onSubmit={handleSubmit} className="pb-6 px-6 sm:px-10">
       <div className="px-4 space-y-4">
         <MiniFolderCard folder={folder} />
         <fieldset>
@@ -62,7 +62,7 @@ export const DeleteFolderForm = ({
           </label>
           <Input required pattern={folder.slug} />
         </fieldset>
-        <div className="mt-2 flex justify-end items-center gap-2">
+        <div className="mt-4 flex justify-end items-center gap-2">
           <Button
             disabled={isSubmitting}
             onClick={() => {
