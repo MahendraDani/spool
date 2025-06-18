@@ -26,7 +26,7 @@ export const DeleteFolderResponsiveModal = ({
             Are you sure you want to delete the following folder?
           </ResponsiveModal.Description>
         </ResponsiveModal.Header>
-        <div className="px-4 py-2 text-sm text-center md:text-balance">
+        <div className="px-6 sm:px-12 py-6 sm:py-2 text-sm">
           Deleting the <span className="font-medium">{folder.name}</span> folder
           will also delete all the{" "}
           <span className="font-medium">
