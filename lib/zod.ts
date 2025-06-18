@@ -68,3 +68,16 @@ export const ZSlugSchema = z.object({
         "Slugs can only contain letters, numbers, and hyphens. No spaces or special characters are allowed",
     }),
 });
+
+export const ZEditFolderSchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: "Name is required" })
+    .max(50, { message: "Name must be less than 50 characters" })
+    .refine((val) => FOLDER_NAME_REGEX.test(val), {
+      message:
+        'Folder name can not contain characters like < > : " / \\ | ? * and should not start or end with a dot or space. Spaces are allowed',
+    }).optional(),
+  description: z.string().optional()
+});
+

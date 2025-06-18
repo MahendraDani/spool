@@ -21,7 +21,7 @@ export const GET = (req: NextRequest) => {
           workspaceId: workspace.id,
         },
         orderBy: {
-          createdAt: "desc",
+          updatedAt: "desc",
         },
         include: {
           _count: true,

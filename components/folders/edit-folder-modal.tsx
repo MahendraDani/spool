@@ -1,15 +1,15 @@
-import { useMediaQuery } from "@/hooks/use-media-query";
+import { TFolderWithCount } from "@/lib/types";
 import {
   ResponsiveModal,
   useResponsiveModalContext,
 } from "../responsive-modal";
+import { Button } from "../ui/button";
 import { DropdownMenuItem } from "../ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { TFolderWithCount } from "@/lib/types";
-import { DeleteFolderForm } from "./delete-modal-form";
-import { Trash2 } from "lucide-react";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { EditFolderModalForm } from "./edit-folder-form";
+import { PencilIcon } from "lucide-react";
 
-export const DeleteFolderResponsiveModal = ({
+export const EditFolderModal = ({
   folder,
   setShowFolderActionMenu,
 }: {
@@ -18,23 +18,16 @@ export const DeleteFolderResponsiveModal = ({
 }) => {
   return (
     <ResponsiveModal>
-      <DeleteFormTrigger />
+      <EditFolderModalTrigger />
       <ResponsiveModal.Content className="p-0 md:w-md">
         <ResponsiveModal.Header className="bg-accent p-4 rounded-tr-md rounded-tl-md">
-          <ResponsiveModal.Title>Delete Folder</ResponsiveModal.Title>
+          <ResponsiveModal.Title>Edit Folder</ResponsiveModal.Title>
           <ResponsiveModal.Description>
-            Are you sure you want to delete the following folder?
+            Folders can be utilized to organize and manage related snippets.
+            Update the details of the folder.
           </ResponsiveModal.Description>
         </ResponsiveModal.Header>
-        <div className="px-4 py-2 text-sm text-center md:text-balance">
-          Deleting the <span className="font-medium">{folder.name}</span> folder
-          will also delete all the{" "}
-          <span className="font-medium">
-            {folder._count.snippets} snippets.
-          </span>{" "}
-          This action can not be undone - proceed with caution.
-        </div>
-        <DeleteFolderForm
+        <EditFolderModalForm
           folder={folder}
           setShowFolderActionMenu={setShowFolderActionMenu}
         />
@@ -43,20 +36,20 @@ export const DeleteFolderResponsiveModal = ({
   );
 };
 
-const DeleteFormTrigger = () => {
+const EditFolderModalTrigger = () => {
   const { setShowResponsiveModal } = useResponsiveModalContext();
   const { isMobile } = useMediaQuery();
 
   if (isMobile) {
     return (
       <Button
-        variant={"destructive"}
+        variant={"secondary"}
         onClick={() => {
           setShowResponsiveModal(true);
         }}
       >
-        <Trash2 />
-        <span>Delete</span>
+        <PencilIcon />
+        <span>Edit</span>
       </Button>
     );
   }
@@ -66,10 +59,9 @@ const DeleteFormTrigger = () => {
         setShowResponsiveModal(true);
         e.preventDefault();
       }}
-      variant="destructive"
     >
-      <Trash2 />
-      <span>Delete</span>
+      <PencilIcon />
+      <span>Edit</span>
     </DropdownMenuItem>
   );
 };
