@@ -19,6 +19,7 @@ import { Button } from "../ui/button";
 import { DeleteFolderResponsiveModal } from "./delete-folder-modal";
 import { TFolderWithCount } from "@/lib/types";
 import { useState } from "react";
+import { EditFolderModal } from "./edit-folder-modal";
 
 export const FolderActionMenu = ({
   withinSidebar = false,
@@ -50,7 +51,7 @@ export const FolderActionMenu = ({
           </DrawerHeader>
           <div className="grid grid-cols-1 space-y-2 p-6">
             <Button variant={"secondary"}>Open</Button>
-            <Button variant={"secondary"}>Edit</Button>
+            <EditFolderModal folder={folder} setShowFolderActionMenu={setShowFolderActionMenu}/>
             <DeleteFolderResponsiveModal folder={folder} setShowFolderActionMenu={setShowFolderActionMenu} />
           </div>
         </DrawerContent>
@@ -74,9 +75,10 @@ export const FolderActionMenu = ({
         <DropdownMenuItem>
           <span>Open</span>
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        {/* <DropdownMenuItem>
           <span>Edit</span>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
+        <EditFolderModal folder={folder} setShowFolderActionMenu={setShowFolderActionMenu}/>
         <DeleteFolderResponsiveModal folder={folder} setShowFolderActionMenu={setShowFolderActionMenu} />
       </DropdownMenuContent>
     </DropdownMenu>
