@@ -7,12 +7,13 @@ import { DropdownMenuItem } from "../ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { TFolderWithCount } from "@/lib/types";
 import { DeleteFolderForm } from "./delete-modal-form";
+import { Trash2 } from "lucide-react";
 
 export const DeleteFolderResponsiveModal = ({
   folder,
-  setShowFolderActionMenu
+  setShowFolderActionMenu,
 }: {
-  setShowFolderActionMenu : (showFolderActionMenu : boolean) => void
+  setShowFolderActionMenu: (showFolderActionMenu: boolean) => void;
   folder: TFolderWithCount;
 }) => {
   return (
@@ -33,12 +34,14 @@ export const DeleteFolderResponsiveModal = ({
           </span>{" "}
           This action can not be undone - proceed with caution.
         </div>
-        <DeleteFolderForm folder={folder} setShowFolderActionMenu={setShowFolderActionMenu} />
+        <DeleteFolderForm
+          folder={folder}
+          setShowFolderActionMenu={setShowFolderActionMenu}
+        />
       </ResponsiveModal.Content>
     </ResponsiveModal>
   );
 };
-
 
 const DeleteFormTrigger = () => {
   const { setShowResponsiveModal } = useResponsiveModalContext();
@@ -47,11 +50,13 @@ const DeleteFormTrigger = () => {
   if (isMobile) {
     return (
       <Button
+        variant={"destructive"}
         onClick={() => {
           setShowResponsiveModal(true);
         }}
       >
-        Delete
+        <Trash2 />
+        <span>Delete</span>
       </Button>
     );
   }
@@ -61,7 +66,9 @@ const DeleteFormTrigger = () => {
         setShowResponsiveModal(true);
         e.preventDefault();
       }}
+      variant="destructive"
     >
+      <Trash2 />
       <span>Delete</span>
     </DropdownMenuItem>
   );
